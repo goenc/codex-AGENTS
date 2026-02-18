@@ -75,14 +75,6 @@ Bevyプロジェクトかどうかの判定は `Cargo.toml` の依存に `bevy` 
 - 以降の成果物（要件定義書、result.json、replay、golden）は `target_project_root` 配下に置く。
 - `target_project_root` 未確定のまま実装を開始しない。
 
-## Requirement Context Metadata
-要件定義書だけで開発再開できるよう、`target_project_root` の明示を必須化する。
-
-- `RULE-PROJ-CONTEXT-001` `要件定義_プロジェクト名.md` には `# 要件定義` 直下で `target_project_root: <absolute_path>` を必須記載する。
-- `RULE-PROJ-CONTEXT-002` `target_project_root` は当該サイクルで確定した `target_project_root` と完全一致させる。変更時は `# 変更履歴` に記録する。
-- `RULE-PROJ-CONTEXT-003` 要件定義書の新規作成時は初版から `target_project_root` を記載し、空値を禁止する。
-- `RULE-PROJ-CONTEXT-004` 開発再開ターンの開始時に、Codex は要件定義書の `target_project_root` 記載有無と値一致を確認し、不一致時は実装前に修正する。
-
 ## Planning-First Policy
 無駄な実装を避けるため、既定動作は「要件検討（Plan-First）」とする。
 

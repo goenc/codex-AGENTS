@@ -1,13 +1,6 @@
 # AGENTS Change Log
 
 ## Records
-- `change_id`: `CHG-20260219-0454`
-- `target_files`: `AGENTS/10_project_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
-- `rules_added_or_updated`: `RULE-PROJ-CONTEXT-001..004`
-- `validation_result`: `PASS`（参照先存在・見出し存在・ルールID重複なし・優先順位矛盾なし）
-- `rollback_point`: `C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0454\`
-- `notes`: `要件定義書に target_project_root の必須記載を追加し、再開ターンでの一致確認を固定化`
-
 - `change_id`: `CHG-20260219-0359`
 - `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
 - `rules_added_or_updated`: `RULE-DEV-COMMIT-ROUTE-001..007`
