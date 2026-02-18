@@ -1,13 +1,6 @@
 # AGENTS Change Log
 
 ## Records
-- `change_id`: `CHG-20260219-0359`
-- `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
-- `rules_added_or_updated`: `RULE-DEV-COMMIT-ROUTE-001..007`
-- `validation_result`: `PASS`（参照先存在・見出し存在・ルールID重複なし・優先順位矛盾なし）
-- `rollback_point`: `C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0359\`
-- `notes`: `コミット指示の誤字許容ルーティングを追加し、エージェント系ヒント同時成立時はAGENTS管理リポジトリへ振り分け`
-
 - `change_id`: `CHG-20260215-1534`
 - `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/30_output_rules.md`
 - `rules_added_or_updated`: `RULE-OUT-MIN-001..004`

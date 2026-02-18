@@ -67,17 +67,6 @@
 - `RULE-DEV-COMMIT-003` `RULE-DEV-COMMIT-002` のコミットメッセージは、実装差分の要点のみを記載する。
 - `RULE-DEV-COMMIT-004` 変更対象が要件定義書や運用文書のみのコミットでは、要件定義更新をメッセージへ記載してよい。
 
-## Commit Intent Routing Rules
-コミット指示時のコミット先を、曖昧入力と誤字を許容して決定する。
-
-- `RULE-DEV-COMMIT-ROUTE-001` コミット先判定は入力正規化（NFKC、英字小文字化、空白と主要記号除去）後に行う。
-- `RULE-DEV-COMMIT-ROUTE-002` `コミット意図` は、正規化後文字列に `コミット` `こみっと` `commit` `gitcommit` が含まれる場合、または `コミット` / `commit` への編集距離が1以内の場合に成立とする。
-- `RULE-DEV-COMMIT-ROUTE-003` `エージェント系ヒント` は、正規化後文字列に `エージェント` `えーじぇんと` `エイジェント` `agent` `agents` `agnts` `agentsmd` `ルール` が含まれる場合、または `エージェント` / `agents` への編集距離が1以内の場合に成立とする。
-- `RULE-DEV-COMMIT-ROUTE-004` `コミット意図` と `エージェント系ヒント` が同時成立した場合は `C:\Users\gonec\RustProjects`（AGENTS管理リポジトリ）へコミットする。
-- `RULE-DEV-COMMIT-ROUTE-005` `コミット意図` が成立し `RULE-DEV-COMMIT-ROUTE-004` が不成立の場合は、`target_project_root`（プロジェクトリポジトリ）へコミットする。
-- `RULE-DEV-COMMIT-ROUTE-006` コミット先が一意に決まらない場合のみ、1回だけ確認質問を行う。確認回答後は同一ターン内で再質問しない。
-- `RULE-DEV-COMMIT-ROUTE-007` 明示指定（例: パス指定、`AGENTS` 指定、プロジェクト名指定）がある場合は `RULE-DEV-COMMIT-ROUTE-004..006` より優先する。
-
 ## Mandatory Development Loop (Fixed Order)
 次の順序を固定し、飛ばさない。
 
