@@ -1,0 +1,4 @@
+change_id: CHG-20260213-0410
+target: AGENTS/10_project_rules.md
+rollback_point: AGENTS/snapshots/10_project_rules_20260213-041047.md
+rollback_command: Copy-Item AGENTS\snapshots\10_project_rules_20260213-041047.md AGENTS\10_project_rules.md -Force

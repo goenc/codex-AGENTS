@@ -1,0 +1,20 @@
+# AGENTS Change Log
+
+- change_id: CHG-20260213-0356
+  target_files: AGENTS/20_development_rules.md
+  rules_added_or_updated: RULE-DEV-ICON-001, RULE-DEV-ICON-002, RULE-DEV-ICON-003
+  validation_result: PASS
+  rollback_point: AGENTS/snapshots/20_development_rules_20260213-035606.md
+  notes: exeアイコン変更時に小アイコン未反映を再発させないため、RT_ICON検証と別名exe引き渡しルールを追加。
+- change_id: CHG-20260213-0400
+  target_files: AGENTS/20_development_rules.md
+  rules_added_or_updated: RULE-DEV-ICON-003
+  validation_result: PASS（参照先存在/見出し/重複ルール/優先順位整合）
+  rollback_point: AGENTS/snapshots/20_development_rules_20260213-040141.md
+  notes: RULE-DEV-ICON-003 を必須から任意へ変更（別名exe作成は必要時のみ）。
+- change_id: CHG-20260213-0410
+  target_files: AGENTS/10_project_rules.md
+  rules_added_or_updated: RULE-PROJ-PLAN-001, RULE-PROJ-PLAN-002, RULE-PROJ-PLAN-003, RULE-PROJ-PLAN-004, RULE-PROJ-PLAN-005
+  validation_result: PASS（参照先存在/見出し/重複ルール/優先順位整合）
+  rollback_point: AGENTS/snapshots/10_project_rules_20260213-041047.md
+  notes: 実装・ビルド等の明示指示がない限りPlan-Firstを維持するよう、Planning-First Policyを強化。
