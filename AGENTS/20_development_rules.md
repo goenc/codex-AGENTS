@@ -7,6 +7,7 @@
 - `RULE-DEV-IMPL-002` 既定実行モードは `Ultra Fast Path` とし、`Fast Path` を常時適用して Plan提示だけで停止しない。
 - `RULE-DEV-IMPL-003` `Full Path` は `RULE-DEV-VERIFY-003` の条件に一致した場合のみ適用する。
 - `RULE-DEV-IMPL-004` 不確定事項は、即時ブロッカーでない限り仮定を明示して先に実装と検証を進める。
+- `RULE-DEV-IMPL-005` 実装可能な依頼でPlan-only停止を禁止する。停止が許可されるのは安全確認が必要な場合のみ。
 
 ## Primary Workflow (Execute-First Loop)
 実装モードでは「Ultra Fast Path（最小実装 -> Light Verify -> 1コミット）」を既定の反復ループとする。
@@ -157,10 +158,3 @@ Fast/Full Path で参照する補助ルールを定義する。
 - `RULE-DEV-LOOP-007` 軽微実装では要件定義書を更新しない。
 - `RULE-DEV-LOOP-008` 要件定義書の更新は、挙動確定または仕様追加が発生した場合のみ実施する。
 - `RULE-DEV-LOOP-009` Step 6/7 のコミット前完了義務は、要件定義書を本サイクルで変更した場合のみ発火する。
-
-## Priority Order
-競合時は次の優先順で判断する。
-1. 安全性（破壊的変更確認のみ）
-2. 実装完走
-3. やり取り削減
-4. 既存儀式的ルール

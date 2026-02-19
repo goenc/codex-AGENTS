@@ -4,10 +4,12 @@
 やり取り回数を減らして実装を完走しやすくする優先規則を定義する。
 
 - `RULE-OG-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..007` を常に参照し、運用判断へ適用する。
-- `RULE-OG-IMPL-002` 優先順位は `安全性（破壊的変更確認のみ） > 実装完走 > やり取り削減 > 既存儀式的ルール` とする。
+- `RULE-OG-IMPL-002` ルール競合時の判定基準は `AGENTS.md` の `RULE-INDEX-IMPL-001` を唯一の正として参照する。
 - `RULE-OG-IMPL-003` 即時ブロッカーでない不確定事項は、質問で停止せず仮定を明示して実装を先行する。
 - `RULE-OG-IMPL-004` 追加質問は「破壊的変更」「不可逆操作」「機密情報変更」「対象プロジェクトが一意に決まらない」のみ許可する。
-- `RULE-OG-IMPL-005` 既存ルールと Ultra Fast Path 方針が競合する場合は、Ultra Fast Path 方針を優先する。
+- `RULE-OG-IMPL-005` ルール競合時の判定は `AGENTS.md` の `RULE-INDEX-IMPL-001` に従う。
+- `RULE-OG-IMPL-006` 実装系依頼ではPlanのみ提示して停止することを禁止する。必ず最小実装 -> 検証 -> コミットまで進める。
+- `RULE-OG-IMPL-007` 即時ブロッカーでない不足情報は、質問せずに仮定を明示して実装する。
 
 ## Startup Context Rules
 開発再開時に必要なコンテキスト確認と、実装/相談モード判定を固定する。
@@ -49,7 +51,7 @@
 
 - `RULE-DEV-WORKLOG-001` コミット間ログの出力先は `C:\Users\gonec\RustProjects\CODEX_WORKLOG.md` に固定する。
 - `RULE-DEV-WORKLOG-002` `CODEX_WORKLOG` は既定で完全無効とする。
-- `RULE-DEV-WORKLOG-003` `CODEX_WORKLOG` は `500行以上の変更` `依存更新（Cargo.toml/Cargo.lock）` `ユーザー明示要求` のいずれかに一致した場合のみ有効化する。
+- `RULE-DEV-WORKLOG-003` `CODEX_WORKLOG` は `500行以上の変更` または `依存更新（Cargo.toml/Cargo.lock変更）` の場合のみ有効化する。
 - `RULE-DEV-WORKLOG-004` `RULE-DEV-WORKLOG-003` で有効化された場合に限り、`RULE-DEV-WORKLOG-001` のファイルが存在しなければテンプレート付きで新規作成する。
 - `RULE-DEV-WORKLOG-005` ユーザーが編集中ログの表示を要求した場合、`CODEX_WORKLOG.md` の現内容を提示してよい。
 - `RULE-DEV-WORKLOG-006` コミットメッセージ作成時は、必ず `git diff --staged` を根拠にし、worklog有効時のみ `CODEX_WORKLOG.md` と突合する。
