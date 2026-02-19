@@ -1,6 +1,13 @@
 # AGENTS Change Log
 
 ## Records
+- change_id: CHG-20260220-0700
+- target_files: AGENTS/30_output_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-OUT-COST-008..009, RULE-OUT-COST-006..007(更新)
+- validation_result: PASS（重複IDなし、参照先存在、例外テンプレの矛盾なし）
+- rollback_point: C:\Users\gonec\RustProjects\AGENTS\snapshots\20260220-070019\
+- notes: 3行固定を維持しつつFAIL時のみ4行テンプレ例外を追加してPreflight/検証失敗時の情報不足を防止
+
 - change_id: CHG-20260220-0655
 - target_files: AGENTS/10_project_rules.md, AGENTS/15_operation_gate_rules.md, AGENTS/20_development_rules.md, AGENTS/30_output_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-PROJ-TARGET-001(更新), RULE-OG-IMPL-008, RULE-DEV-WORKLOG-003(更新), RULE-DEV-VERIFY-003(更新), RULE-DEV-VERIFY-006, RULE-DEV-SAFETY-001, RULE-OUT-COST-007
