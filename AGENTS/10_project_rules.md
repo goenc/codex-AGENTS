@@ -71,7 +71,7 @@ Bevyプロジェクトかどうかの判定は `Cargo.toml` の依存に `bevy` 
 3. 直前サイクル値がない初回のみ、ワークスペースルート `C:\Users\gonec\RustProjects` を既定の `target_project_root` として採用する
 
 運用ルール:
-- `RULE-PROJ-TARGET-001` 明示変更がない限り、`target_project_root` の再確認質問を行わない。
+- `RULE-PROJ-TARGET-001` 明示変更がない限り、`target_project_root` の再確認質問を行わない（CLI経由の実行でも同一ルールを適用する）。
 - `RULE-PROJ-TARGET-002` ユーザーが `target_project_root` を明示変更した場合のみ、当サイクルで更新する。
 - `RULE-PROJ-TARGET-003` `target_project_root` 変更時は、要件定義書 `# 変更履歴` に記録する。
 - `RULE-PROJ-TARGET-004` 初回確定後は、以降のサイクルで同値を継続使用する。

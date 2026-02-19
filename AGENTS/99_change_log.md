@@ -1,6 +1,13 @@
 # AGENTS Change Log
 
 ## Records
+- change_id: CHG-20260220-0655
+- target_files: AGENTS/10_project_rules.md, AGENTS/15_operation_gate_rules.md, AGENTS/20_development_rules.md, AGENTS/30_output_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-PROJ-TARGET-001(更新), RULE-OG-IMPL-008, RULE-DEV-WORKLOG-003(更新), RULE-DEV-VERIFY-003(更新), RULE-DEV-VERIFY-006, RULE-DEV-SAFETY-001, RULE-OUT-COST-007
+- validation_result: PASS（重複IDなし、参照先存在、昇格条件厳格化）
+- rollback_point: C:\Users\gonec\RustProjects\AGENTS\snapshots\20260220-064938\
+- notes: Interaction-Minimizationを維持しつつ、Full Path昇格条件とWorklog条件を厳格化してコスト上振れを抑制
+
 - change_id: CHG-20260220-0650
 - target_files: AGENTS.md, AGENTS/15_operation_gate_rules.md, AGENTS/20_development_rules.md, AGENTS/30_output_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-OG-IMPL-006..007, RULE-DEV-IMPL-005, RULE-OUT-COST-006, RULE-DEV-WORKLOG-003(更新)

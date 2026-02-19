@@ -43,9 +43,10 @@
 
 - `RULE-DEV-VERIFY-001` `Light Verify`（既定）は `cargo fmt --all` + `対象テスト` または `cargo test` を実行し、`clippy` は任意とする。
 - `RULE-DEV-VERIFY-002` `Full Verify` は `cargo fmt --all` `cargo clippy --all-targets --all-features -- -D warnings` `cargo test` `cargo build` の順で実行する。
-- `RULE-DEV-VERIFY-003` `Full Verify` は `Cargo.toml` 変更 `Cargo.lock` 変更 `依存追加/更新` のいずれかがある場合のみ実行する。
+- `RULE-DEV-VERIFY-003` `Full Verify` は次のいずれかの場合のみ実行する: `Cargo.toml` 変更 `Cargo.lock` 変更 `依存追加/更新` `500行以上の差分` `assets/fonts/` 配下の差分 `assets/config/*.default.json` の差分。
 - `RULE-DEV-VERIFY-004` `Light Verify` では `cargo build` を省略してよいが、実行可能成果物が必要な依頼では `cargo build` を追加する。
 - `RULE-DEV-VERIFY-005` 最終報告では、実行した検証モード（Light/Full）と実行コマンドを1-2行で記録する。
+- `RULE-DEV-VERIFY-006` `RULE-DEV-VERIFY-003` の条件に一致しない場合、`Full Verify` の実行を禁止する。
 
 ## External Config Sync Rules
 外部設定ファイルの同期・反映に関する固定ルールを定義する。
@@ -158,3 +159,4 @@ Fast/Full Path で参照する補助ルールを定義する。
 - `RULE-DEV-LOOP-007` 軽微実装では要件定義書を更新しない。
 - `RULE-DEV-LOOP-008` 要件定義書の更新は、挙動確定または仕様追加が発生した場合のみ実施する。
 - `RULE-DEV-LOOP-009` Step 6/7 のコミット前完了義務は、要件定義書を本サイクルで変更した場合のみ発火する。
+- `RULE-DEV-SAFETY-001` 削除系変更が10ファイル以上に及ぶ場合のみ確認を入れる。10ファイル未満の削除は確認なしで進める。
