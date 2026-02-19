@@ -63,15 +63,18 @@ Bevyプロジェクトかどうかの判定は `Cargo.toml` の依存に `bevy` 
 - ルール変更時は対象分割ファイルを更新し、同一ルールを複数ファイルへ重複記載しない。
 
 ## Target Project Resolution
-ワークスペース内に複数プロジェクトがある場合、毎サイクルで `target_project_root` を確定する。
+ワークスペース内に複数プロジェクトがある場合、`target_project_root` を簡略運用で確定する。
 
 決定順序:
 1. ユーザーが明示したパス / プロジェクト名
-2. 直前サイクルで使用した `target_project_root`
-3. それでも曖昧なら、Codex が一度だけユーザーへ確認する
-4. 3で回答が得られない場合は、ワークスペースルート `C:\Users\gonec\RustProjects` を既定の `target_project_root` として採用する
+2. 明示変更がない限り、直前サイクルで使用した `target_project_root` を固定使用する
+3. 直前サイクル値がない初回のみ、ワークスペースルート `C:\Users\gonec\RustProjects` を既定の `target_project_root` として採用する
 
 運用ルール:
+- `RULE-PROJ-TARGET-001` 明示変更がない限り、`target_project_root` の再確認質問を行わない。
+- `RULE-PROJ-TARGET-002` ユーザーが `target_project_root` を明示変更した場合のみ、当サイクルで更新する。
+- `RULE-PROJ-TARGET-003` `target_project_root` 変更時は、要件定義書 `# 変更履歴` に記録する。
+- `RULE-PROJ-TARGET-004` 初回確定後は、以降のサイクルで同値を継続使用する。
 - 以降の成果物（要件定義書、result.json、replay、golden）は `target_project_root` 配下に置く。
 - `target_project_root` 未確定のまま実装を開始しない。
 
@@ -79,7 +82,7 @@ Bevyプロジェクトかどうかの判定は `Cargo.toml` の依存に `bevy` 
 再開時コンテキスト確認と Plan-First 判定は、`AGENTS/15_operation_gate_rules.md` の次のルールを唯一の正として適用する。
 
 - `RULE-PROJ-CONTEXT-001..004`
-- `RULE-PROJ-PLAN-001..005`
+- `RULE-PROJ-PLAN-001..007`
 
 ## Bootstrap And Migration
 初回導入または既存資産がある場合の移行ルールを定義する。

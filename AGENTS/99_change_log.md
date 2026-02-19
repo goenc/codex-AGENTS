@@ -1,6 +1,13 @@
 # AGENTS Change Log
 
 ## Records
+- `change_id`: `CHG-20260220-0644`
+- `target_files`: `AGENTS.md`, `AGENTS/10_project_rules.md`, `AGENTS/15_operation_gate_rules.md`, `AGENTS/20_development_rules.md`, `AGENTS/30_output_rules.md`, `AGENTS/98_maintenance_rules.md`, `AGENTS/99_change_log.md`
+- `rules_added_or_updated`: `RULE-INDEX-IMPL-001..007`, `RULE-PROJ-TARGET-001..004`, `RULE-PROJ-PLAN-001..007`, `RULE-OG-IMPL-001..005`, `RULE-DEV-WORKLOG-002..015`, `RULE-DEV-IMPL-001..004`, `RULE-DEV-VERIFY-003`, `RULE-DEV-CONFIG-008`, `RULE-DEV-CONFIG-012`, `RULE-DEV-FONT-001..006`, `RULE-DEV-LOOP-007..009`, `RULE-OUT-IMPL-001..004`, `RULE-OUT-ASK-002`, `RULE-OUT-COST-001`, `RULE-MAINT-IMPL-001`
+- `validation_result`: `PASS`（参照先存在・見出し存在・クロスファイル重複IDなし・優先順位をUltra Fast Path基準へ更新）
+- `rollback_point`: `C:\Users\gonec\RustProjects\AGENTS\snapshots\20260220-064119\`
+- `notes`: `Ultra Fast Pathを既定化し、Full Verifyを依存更新時のみに限定、WORKLOG常時無効化+条件有効化、Config/Font検証トリガー限定、target_project_root再確認省略、3行出力既定を反映`
+
 - `change_id`: `CHG-20260220-0609`
 - `target_files`: `AGENTS.md`, `AGENTS/15_operation_gate_rules.md`, `AGENTS/20_development_rules.md`, `AGENTS/30_output_rules.md`, `AGENTS/98_maintenance_rules.md`, `AGENTS/99_change_log.md`
 - `rules_added_or_updated`: `RULE-INDEX-IMPL-001..005`, `RULE-OG-IMPL-001..004`, `RULE-PROJ-PLAN-001..007`, `RULE-SPEECH-001..004`, `RULE-DEV-WORKLOG-002..015`, `RULE-DEV-IMPL-001..004`, `RULE-DEV-VERIFY-001..005`, `RULE-DEV-BUILD-001..003`, `RULE-DEV-FONT-001..005`, `RULE-DEV-LOOP-007..009`, `RULE-OUT-IMPL-001..003`, `RULE-OUT-ASK-001..004`, `RULE-MAINT-IMPL-001..002`, `RULE-MAINT-002`

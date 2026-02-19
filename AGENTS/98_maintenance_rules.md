@@ -3,7 +3,7 @@
 ## Interaction-Minimization Priority
 AGENTS更新時も安全性を保ったまま往復を減らす。
 
-- `RULE-MAINT-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..005` を参照し、運用儀式は必要最小限にする。
+- `RULE-MAINT-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..007` を参照し、運用儀式は必要最小限にする。
 - `RULE-MAINT-IMPL-002` 破壊的変更を伴わない小変更は、最小手順（スナップショット -> 検証 -> 反映）を許可する。
 
 ## AGENTS Update Hardening

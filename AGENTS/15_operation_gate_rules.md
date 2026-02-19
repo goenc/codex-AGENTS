@@ -3,10 +3,11 @@
 ## Interaction-Minimization Priority
 やり取り回数を減らして実装を完走しやすくする優先規則を定義する。
 
-- `RULE-OG-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..005` を常に参照し、運用判断へ適用する。
-- `RULE-OG-IMPL-002` 優先順位は `安全性（破壊的変更の確認を含む） > やり取り回数を減らす観点 > その他の運用規則` とする。
+- `RULE-OG-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..007` を常に参照し、運用判断へ適用する。
+- `RULE-OG-IMPL-002` 優先順位は `安全性（破壊的変更確認のみ） > 実装完走 > やり取り削減 > 既存儀式的ルール` とする。
 - `RULE-OG-IMPL-003` 即時ブロッカーでない不確定事項は、質問で停止せず仮定を明示して実装を先行する。
 - `RULE-OG-IMPL-004` 追加質問は「破壊的変更」「不可逆操作」「機密情報変更」「対象プロジェクトが一意に決まらない」のみ許可する。
+- `RULE-OG-IMPL-005` 既存ルールと Ultra Fast Path 方針が競合する場合は、Ultra Fast Path 方針を優先する。
 
 ## Startup Context Rules
 開発再開時に必要なコンテキスト確認と、実装/相談モード判定を固定する。
@@ -47,9 +48,9 @@
 コミット間の実装概要ログ運用と、コミットメッセージ生成時の根拠を固定する。
 
 - `RULE-DEV-WORKLOG-001` コミット間ログの出力先は `C:\Users\gonec\RustProjects\CODEX_WORKLOG.md` に固定する。
-- `RULE-DEV-WORKLOG-002` `CODEX_WORKLOG` は既定で無効とし、`大規模変更` `複数コミット予定` `調査中心タスク` `ユーザー明示要求` のいずれかで有効化する。
-- `RULE-DEV-WORKLOG-003` `RULE-DEV-WORKLOG-002` で有効化された場合に限り、`RULE-DEV-WORKLOG-001` のファイルが存在しなければテンプレート付きで新規作成する。
-- `RULE-DEV-WORKLOG-004` 有効時の各ログ行には最低限 `timestamp` `scope([AGENT]/[SOFT])` `summary` を含める。
+- `RULE-DEV-WORKLOG-002` `CODEX_WORKLOG` は既定で完全無効とする。
+- `RULE-DEV-WORKLOG-003` `CODEX_WORKLOG` は `500行以上の変更` `依存更新（Cargo.toml/Cargo.lock）` `ユーザー明示要求` のいずれかに一致した場合のみ有効化する。
+- `RULE-DEV-WORKLOG-004` `RULE-DEV-WORKLOG-003` で有効化された場合に限り、`RULE-DEV-WORKLOG-001` のファイルが存在しなければテンプレート付きで新規作成する。
 - `RULE-DEV-WORKLOG-005` ユーザーが編集中ログの表示を要求した場合、`CODEX_WORKLOG.md` の現内容を提示してよい。
 - `RULE-DEV-WORKLOG-006` コミットメッセージ作成時は、必ず `git diff --staged` を根拠にし、worklog有効時のみ `CODEX_WORKLOG.md` と突合する。
 - `RULE-DEV-WORKLOG-007` staged差分にAGENTS系ファイルとソフト実装系ファイルが混在する場合は、コミットを分割して個別メッセージを作成する（ユーザー明示許可がある場合のみ混在コミット可）。
@@ -58,9 +59,9 @@
 - `RULE-DEV-WORKLOG-010` コミット失敗時、worklog有効時のみ `CODEX_WORKLOG.md` をリセットせず、失敗理由を追記して再試行に備える。
 - `RULE-DEV-WORKLOG-011` 変更分類は `AGENTS.md` または `AGENTS/` 配下を `AGENT`、それ以外の実装/設定/テスト変更を `SOFT` とする。
 - `RULE-DEV-WORKLOG-012` `CODEX_WORKLOG.md` の新規作成またはリセット時は、`# CODEX Worklog` `## Current Cycle` `## Entries` の3見出しを必須とする。
-- `RULE-DEV-WORKLOG-013` コミット実行直前に `Commit Preflight` を必ず実施する。
-- `RULE-DEV-WORKLOG-014` worklog有効時の `Commit Preflight` は `scope整合(AGENT/SOFT)` `git diff --staged と worklog 突合完了` `コミットメッセージ本文1行以上(行頭「・」)` の3点を必須チェックとする。
-- `RULE-DEV-WORKLOG-015` worklog無効時の `Commit Preflight` は簡略化を許可し、`git diff --staged 確認` `コミットメッセージ形式適合` `実行した検証モード（Light/Full）の記録` の3点を必須チェックとし、いずれかが `FAIL` の場合は `git commit` を実行してはならない。
+- `RULE-DEV-WORKLOG-013` コミット実行直前に `Commit Preflight` を必ず実施し、常時簡略版を適用する。
+- `RULE-DEV-WORKLOG-014` `Commit Preflight` の必須チェックは `git diff --staged 確認` `コミットメッセージ形式適合` `実行した検証モード（Light/Full）の記録` の3点とする。
+- `RULE-DEV-WORKLOG-015` `RULE-DEV-WORKLOG-014` のいずれかが `FAIL` の場合は `git commit` を実行してはならない。
 
 ## Result Artifact Rules
 実行結果ファイルの最小出力要件を固定する。

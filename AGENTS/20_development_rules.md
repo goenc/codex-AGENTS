@@ -3,13 +3,13 @@
 ## Interaction-Minimization Priority
 やり取り回数を減らし、1回の指示で完走するための優先規則を定義する。
 
-- `RULE-DEV-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..005` を常に参照し、実装判断へ適用する。
-- `RULE-DEV-IMPL-002` 実装モードでは `Fast Path` を既定とし、Plan提示だけで停止しない。
+- `RULE-DEV-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..007` を常に参照し、実装判断へ適用する。
+- `RULE-DEV-IMPL-002` 既定実行モードは `Ultra Fast Path` とし、`Fast Path` を常時適用して Plan提示だけで停止しない。
 - `RULE-DEV-IMPL-003` `Full Path` は `RULE-DEV-VERIFY-003` の条件に一致した場合のみ適用する。
 - `RULE-DEV-IMPL-004` 不確定事項は、即時ブロッカーでない限り仮定を明示して先に実装と検証を進める。
 
 ## Primary Workflow (Execute-First Loop)
-実装モードでは「最小実装 -> 最小検証 -> 1コミット」を既定の反復ループとする。
+実装モードでは「Ultra Fast Path（最小実装 -> Light Verify -> 1コミット）」を既定の反復ループとする。
 
 1. ユーザーが実装系依頼を出す
 2. Codexが最小差分を実装し、Light VerifyまたはFull Verifyを実行する
@@ -42,7 +42,7 @@
 
 - `RULE-DEV-VERIFY-001` `Light Verify`（既定）は `cargo fmt --all` + `対象テスト` または `cargo test` を実行し、`clippy` は任意とする。
 - `RULE-DEV-VERIFY-002` `Full Verify` は `cargo fmt --all` `cargo clippy --all-targets --all-features -- -D warnings` `cargo test` `cargo build` の順で実行する。
-- `RULE-DEV-VERIFY-003` 次のいずれかで `Full Verify` を必須化する: 依存更新（`Cargo.toml`/`Cargo.lock`）、広範囲改修、壊しやすい既知領域の変更、ユーザー明示要求。
+- `RULE-DEV-VERIFY-003` `Full Verify` は `Cargo.toml` 変更 `Cargo.lock` 変更 `依存追加/更新` のいずれかがある場合のみ実行する。
 - `RULE-DEV-VERIFY-004` `Light Verify` では `cargo build` を省略してよいが、実行可能成果物が必要な依頼では `cargo build` を追加する。
 - `RULE-DEV-VERIFY-005` 最終報告では、実行した検証モード（Light/Full）と実行コマンドを1-2行で記録する。
 
@@ -56,7 +56,7 @@
 - `RULE-DEV-CONFIG-005` ユーザーが反映OKを明示した場合のみ、開発モードで `%AppData%\\<AppName>\\*.override.json` から `assets/config/*.default.json` へ反映してよい。
 - `RULE-DEV-CONFIG-006` 設定同期を行った場合のみ、検証または最終報告で同期元と同期先2箇所の成否を短く記録する。
 - `RULE-DEV-CONFIG-007` 外部設定を伴う実装では、要件整理時に `config_contract` を1行記録する。既定値は `default=assets/config/*.default.json` `runtime=%AppData%\\<AppName>\\*.override.json` とする。
-- `RULE-DEV-CONFIG-008` 設定ファイルを変更した場合、または `Full Verify` 実行時は設定形式の静的検査を必須実行し、`assets/config/*.default.json` の存在と非JSON設定参照を機械検出する。
+- `RULE-DEV-CONFIG-008` 設定形式の静的検査は、`assets/config/*.default.json` に差分がある場合のみ実行し、対象ファイルの存在と非JSON設定参照を機械検出する。
 - `RULE-DEV-CONFIG-009` `RULE-DEV-CONFIG-008` で違反が出た場合は実装完了判定を不可とし、修正完了までコミットしてはならない。
 - `RULE-DEV-CONFIG-010` 設定検証を実施した場合は、最終報告に `config_policy_validation`（`PASS` / `FAIL`）を必ず記録する。
 - `RULE-DEV-CONFIG-011` 設定ファイルの拡張子・相対パスは単一定義（共有定数または共通ローダー）で管理し、他箇所での拡張子文字列直書きを禁止する。
@@ -79,13 +79,14 @@
 - `RULE-DEV-COMMIT-ROUTE-006` コミット先が一意に決まらない場合のみ、1回だけ確認質問を行う。確認回答後は同一ターン内で再質問しない。
 - `RULE-DEV-COMMIT-ROUTE-007` 明示指定（例: パス指定、`AGENTS` 指定、プロジェクト名指定）がある場合は `RULE-DEV-COMMIT-ROUTE-004..006` より優先する。
 
-## Mandatory Development Loop (Fast-First Order)
-次の順序を固定し、既定は `Fast Path` とする。
+## Mandatory Development Loop (Ultra Fast First Order)
+次の順序を固定し、既定は `Ultra Fast Path` とする。
 
-### Fast Path (Default)
+### Ultra Fast Path (Default)
 0. Intake
 - 目的と完了条件を1文で定義する。
 - `target_project_root` を確定する。
+- 明示変更がない限り、直前サイクルの `target_project_root` を固定使用する。
 - 破壊的変更の有無だけ先に判定し、該当時のみ確認する。
 
 1. Delta Requirements
@@ -98,7 +99,7 @@
 
 3. Light Verify
 - `RULE-DEV-VERIFY-001` に従って検証する。
-- `RULE-DEV-VERIFY-003` に該当した場合は `Full Path` へ切り替える。
+- `RULE-DEV-VERIFY-003` に該当した場合のみ `Full Path` へ切り替える。
 
 4. Commit & Handoff
 - `RULE-DEV-WORKLOG-013..015` の Preflight を実施する。
@@ -123,7 +124,7 @@
 
 4. Codex Verification (Full)
 - `RULE-DEV-VERIFY-002` を実行する。
-- `RULE-DEV-BUILD-001` `RULE-DEV-BUILD-002` `RULE-DEV-FONT-001..004` `RULE-DEV-CONFIG-012` を適用する。
+- `RULE-DEV-BUILD-001` `RULE-DEV-BUILD-002` `RULE-DEV-FONT-001..006` `RULE-DEV-CONFIG-012` を適用する。
 
 5. User Manual Gate
 - GUIアプリまたはユーザー要求時のみ、手動確認手順を提示する（OK/NGを記録）。
@@ -146,19 +147,20 @@ Fast/Full Path で参照する補助ルールを定義する。
 - `RULE-DEV-BUILD-001` `cargo build` は `Full Verify` 実行時、または実行可能成果物が必要な依頼で必須とする。
 - `RULE-DEV-BUILD-002` `cargo build` を実行し、バイナリターゲットがある場合は実行可能ファイルのパス（例: `target\\debug\\<bin_name>.exe`）を報告する。
 - `RULE-DEV-BUILD-003` `result.json` を出力する場合、バイナリターゲットがあれば `executable_path`（相対または絶対）を記録する。
-- `RULE-DEV-FONT-001` フォントポリシー検証は、UI/フォント関連変更時または `Full Verify` 実行時に必須とする。
+- `RULE-DEV-FONT-001` フォントポリシー検証は `assets/fonts/` 配下に差分がある場合のみ必須とする。
 - `RULE-DEV-FONT-002` 最低限の禁止検査対象は `C:\\Windows\\Fonts`（および `/Windows/Fonts`）の直参照、`.ttc` 参照、`TextFont` での `Handle::default()` 依存とする。
 - `RULE-DEV-FONT-003` `RULE-DEV-FONT-002` の検査はローカル検証またはCIに組み込む。
 - `RULE-DEV-FONT-004` フォント実在確認または禁止パターン検査で違反が出た場合は実装完了判定を不可とする。
 - `RULE-DEV-FONT-005` `result.json` を出力する場合は `font_policy`（`required_font` `resolved_font_path` `validation`）を記録する。
-- `RULE-DEV-CONFIG-012` 設定静的検査を実施した場合は、その結果（PASS/FAIL）を最終報告へ必ず出力する。
-- `RULE-DEV-LOOP-007` 次サイクル要件の更新は、要件定義書更新が今回スコープに含まれる場合のみ必須とする。
-- `RULE-DEV-LOOP-008` `RULE-DEV-LOOP-007` が適用され、次サイクル要求が未確定の場合は `未確定` と明示する。
-- `RULE-DEV-LOOP-009` Step 6/7 のコミット前完了義務は、要件定義書を本サイクルで更新する運用時のみ適用する。
+- `RULE-DEV-FONT-006` UIコードのみの軽微変更では、`assets/fonts/` に差分がない限りフォント検証を実行しない。
+- `RULE-DEV-CONFIG-012` 設定静的検査は `assets/config/*.default.json` に差分がある場合のみ実施し、実施時は結果（PASS/FAIL）を最終報告へ出力する。
+- `RULE-DEV-LOOP-007` 軽微実装では要件定義書を更新しない。
+- `RULE-DEV-LOOP-008` 要件定義書の更新は、挙動確定または仕様追加が発生した場合のみ実施する。
+- `RULE-DEV-LOOP-009` Step 6/7 のコミット前完了義務は、要件定義書を本サイクルで変更した場合のみ発火する。
 
 ## Priority Order
 競合時は次の優先順で判断する。
-1. 安全性と決定的実行制約
-2. やり取り回数を減らす観点（実装完走の優先）
-3. `AGENTS.md`（インデックス）と、そこから参照される分割ルールファイル
-4. ローカル実装都合
+1. 安全性（破壊的変更確認のみ）
+2. 実装完走
+3. やり取り削減
+4. 既存儀式的ルール
