@@ -1,20 +1,6 @@
 # AGENTS Change Log
 
 ## Records
-- `change_id`: `CHG-20260220-0516`
-- `target_files`: `AGENTS.md`, `AGENTS/10_project_rules.md`, `AGENTS/15_operation_gate_rules.md`, `AGENTS/20_development_rules.md`, `AGENTS/30_output_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
-- `rules_added_or_updated`: `RULE-PROJ-CONTEXT-001..004`, `RULE-PROJ-PLAN-001..005`, `RULE-SPEECH-001..004`, `RULE-DEV-COMMIT-001..008`, `RULE-DEV-WORKLOG-001..015`, `RULE-DEV-RESULT-001..005`, `RULE-OUT-COST-003`
-- `validation_result`: `PASS`（参照先存在・見出し存在・ルールID重複なし・優先順位矛盾なし）
-- `rollback_point`: `C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260220-0516\`
-- `notes`: `運用ゲート専用ファイル AGENTS/15_operation_gate_rules.md を新設し、再開時コンテキスト/実装モード判定/発話/event.json/コミット&worklog/result 出力ルールを移管して集約`
-
-- `change_id`: `CHG-20260220-0508`
-- `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
-- `rules_added_or_updated`: `RULE-DEV-COMMIT-008`, `RULE-DEV-WORKLOG-013..015`
-- `validation_result`: `PASS`（参照先存在・見出し存在・ルールID重複なし・優先順位矛盾なし）
-- `rollback_point`: `C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260220-0508\`
-- `notes`: `コミット前の固定ゲート（Commit Preflight）を追加し、本文必須・staged突合・scope整合がPASSでなければコミット不可に強化`
-
 - `change_id`: `CHG-20260219-2302`
 - `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
 - `rules_added_or_updated`: `RULE-DEV-WORKLOG-001..012`

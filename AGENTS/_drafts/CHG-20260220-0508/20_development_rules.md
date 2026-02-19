@@ -30,12 +30,12 @@
 - `RULE-DEV-TARGETFILES-005` 列挙結果の上限は `300` ファイルまでとする。上限超過時は `RULE-DEV-TARGETFILES-006` の優先順で先頭から採用する。
 - `RULE-DEV-TARGETFILES-006` 上限超過時の採用優先順は `Cargo.toml` `Cargo.lock` `要件定義_*.md` `src/**/*.rs` `tests/**/*.rs` `assets/config/**/*.json` `*.toml` `*.md` とする。
 
-## Operation Gate Delegation
-発話出力とコミット運用の固定ゲートは、`AGENTS/15_operation_gate_rules.md` の次のルールを唯一の正として適用する。
+## Speech Output Rules
+開始時/終了時の発話用JSON出力に関する固定ルールを定義する。
 
-- `RULE-SPEECH-001..004`
-- `RULE-DEV-COMMIT-001..008`
-- `RULE-DEV-WORKLOG-001..015`
+- `RULE-SPEECH-001` 開始時の readaloud JSON は `Mandatory Development Loop` の Step 0 で必ず出力する。
+- `RULE-SPEECH-002` 終了時の readaloud JSON は `Mandatory Development Loop` の Step 8 で必ず出力する。
+- `RULE-SPEECH-003` `RULE-SPEECH-001..002` は実装モード時のみ適用し、Plan-First（非実装モード）では適用しない。
 
 ## External Config Sync Rules
 外部設定ファイルの同期・反映に関する固定ルールを定義する。
@@ -58,6 +58,37 @@
 - `RULE-DEV-KB-001` 再利用可能な原因/対処を特定した場合のみ、`User Manual Gate` で `OK` 後に `C:\Users\gonec\RustProjects\KNOWLEDGE.md` へ追記してよい。
 - `RULE-DEV-KB-002` `KNOWLEDGE.md` の更新は追記方式（add-only）を既定とし、既存 `kb_id` の意味変更や削除はユーザー明示指示がある場合のみ許可する。
 - `RULE-DEV-KB-003` Step 6 または Step 7 で要件定義書を更新する際は、`target_tags` に一致する `knowledge_refs` を同期する。
+
+## Commit Message Rules
+コミットメッセージの言語と記載対象を固定する。
+
+- `RULE-DEV-COMMIT-001` コミットメッセージは日本語で記述する。
+- `RULE-DEV-COMMIT-002` 実装変更（例: `src/` `Cargo.toml` `Cargo.lock` `assets/` `tests/`）を含むコミットでは、要件定義書を更新した事実をメッセージへ記載しない。
+- `RULE-DEV-COMMIT-003` `RULE-DEV-COMMIT-002` のコミットメッセージは、実装差分の要点のみを記載する。
+- `RULE-DEV-COMMIT-004` 変更対象が要件定義書や運用文書のみのコミットでは、要件定義更新をメッセージへ記載してよい。
+- `RULE-DEV-COMMIT-005` コミットメッセージの1行目はタイトル行のみとし、行頭に記号（例: `-` `・` `*`）を付けない。
+- `RULE-DEV-COMMIT-006` 2行目以降に変更点を列挙する場合、各行の行頭は必ず `・` とする。
+- `RULE-DEV-COMMIT-007` 2行目以降の列挙では、`-` `*` など `・` 以外の箇条書き記号を使用しない。
+- `RULE-DEV-COMMIT-008` コミットメッセージは `1行目タイトル` `2行目空行` `3行目以降本文` の3部構成を必須とし、本文は1行以上を必須とする。
+
+## Commit Worklog Rules
+コミット間の実装概要ログ運用と、コミットメッセージ生成時の根拠を固定する。
+
+- `RULE-DEV-WORKLOG-001` コミット間ログの出力先は `C:\Users\gonec\RustProjects\CODEX_WORKLOG.md` に固定する。
+- `RULE-DEV-WORKLOG-002` `RULE-DEV-WORKLOG-001` のファイルが存在しない場合は、コミット関連処理の前にテンプレート付きで新規作成する。
+- `RULE-DEV-WORKLOG-003` 実装中の作業ログは Markdown の追記方式とし、時系列（古い順）を維持する。
+- `RULE-DEV-WORKLOG-004` 各ログ行には最低限 `timestamp` `scope([AGENT]/[SOFT])` `summary` を含める。
+- `RULE-DEV-WORKLOG-005` ユーザーが編集中ログの表示を要求した場合、`CODEX_WORKLOG.md` の現内容を提示してよい。
+- `RULE-DEV-WORKLOG-006` コミットメッセージ作成時は、必ず `git diff --staged` と `CODEX_WORKLOG.md` を突合し、staged差分に存在する事実のみを採用する。
+- `RULE-DEV-WORKLOG-007` staged差分にAGENTS系ファイルとソフト実装系ファイルが混在する場合は、コミットを分割して個別メッセージを作成する（ユーザー明示許可がある場合のみ混在コミット可）。
+- `RULE-DEV-WORKLOG-008` コミットメッセージのタイトルと本文は、`RULE-DEV-WORKLOG-006` の突合結果を根拠に生成する。
+- `RULE-DEV-WORKLOG-009` コミット成功後は `CODEX_WORKLOG.md` をテンプレート状態へリセットし、前コミット分のエントリを残さない。
+- `RULE-DEV-WORKLOG-010` コミット失敗時は `CODEX_WORKLOG.md` をリセットせず、失敗理由を追記して再試行に備える。
+- `RULE-DEV-WORKLOG-011` 変更分類は `AGENTS.md` または `AGENTS/` 配下を `AGENT`、それ以外の実装/設定/テスト変更を `SOFT` とする。
+- `RULE-DEV-WORKLOG-012` `CODEX_WORKLOG.md` の新規作成またはリセット時は、`# CODEX Worklog` `## Current Cycle` `## Entries` の3見出しを必須とする。
+- `RULE-DEV-WORKLOG-013` コミット実行直前に `Commit Preflight` を必ず実施し、`CODEX_WORKLOG.md` の最新行へ `preflight` 結果を追記する。
+- `RULE-DEV-WORKLOG-014` `Commit Preflight` の必須チェックは `scope整合(AGENT/SOFT)` `git diff --staged 突合完了` `コミットメッセージ本文1行以上(行頭「・」)` の3点とする。
+- `RULE-DEV-WORKLOG-015` `Commit Preflight` のいずれかが `FAIL` の場合、`git commit` を実行してはならない。
 
 ## Commit Intent Routing Rules
 コミット指示時のコミット先を、曖昧入力と誤字を許容して決定する。
@@ -125,10 +156,14 @@
 - `RULE-DEV-LOOP-008` 次サイクル要求が未確定の場合は「未確定」と明示してから Step 8 に進む。
 
 ### 8. Record & Handoff
-- `RULE-DEV-RESULT-001..005` の最小出力要件は `AGENTS/15_operation_gate_rules.md` を唯一の正として適用する。
+- `RULE-DEV-RESULT-001` `target_project_root/result.json` には `result_mode: \"minimal\"` を必須出力する。
+- `RULE-DEV-RESULT-002` `minimal` の必須項目は `result_mode` `os` `rustc_version` `cargo_version` `timestamp_utc` `config_policy_validation` とする。
+- `RULE-DEV-RESULT-003` `cpu_arch` `target_triple` `locale` `timezone` `dependency_set` などの追加情報は、ユーザー明示要求または失敗再現性確保が必要な場合のみ任意で追記してよい。
+- `RULE-DEV-RESULT-004` `RULE-DEV-RESULT-003` の追加情報は互換性確保のため `extra` オブジェクト配下に格納する。
+- `RULE-DEV-RESULT-005` `config_policy_validation` が `FAIL` の場合は `config_policy_violations`（非空配列）を必須出力する。
 - `RULE-DEV-BUILD-003` バイナリターゲットがある場合、`result.json` に `executable_path`（相対または絶対）を記録する。
 - `RULE-DEV-FONT-005` `result.json` には `font_policy` を記録し、`required_font` `resolved_font_path` `validation`（PASS/FAIL）を含める。
-- 発話出力先の固定は `AGENTS/15_operation_gate_rules.md` を唯一の正として適用する。
+- 発話用JSONの出力先は常に `C:\Users\gonec\RustProjects\event.json` に固定する。
 
 ## Priority Order
 競合時は次の優先順で判断する。

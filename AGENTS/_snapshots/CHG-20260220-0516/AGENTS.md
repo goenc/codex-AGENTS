@@ -9,10 +9,9 @@
 
 読み込み順（上から順に適用）:
 1. `AGENTS/10_project_rules.md`
-2. `AGENTS/15_operation_gate_rules.md`
-3. `AGENTS/20_development_rules.md`
-4. `AGENTS/30_output_rules.md`
-5. `AGENTS/98_maintenance_rules.md`
+2. `AGENTS/20_development_rules.md`
+3. `AGENTS/30_output_rules.md`
+4. `AGENTS/98_maintenance_rules.md`
 
 変更履歴:
 - `AGENTS/99_change_log.md`（記録専用。実行ルールとしては適用しない）
