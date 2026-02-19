@@ -1,24 +1,24 @@
 # AGENTS Split: Development Rules (Rust + Bevy)
 
-## Primary Workflow (User-Codex Loop)
-このループを最優先ワークフローとして固定する。
-実行時の詳細手順と判定は `Mandatory Development Loop` を唯一の正とし、本節は概要説明として扱う。
-本節は、実装モードへ移行した後の反復開発サイクルを対象とする。
+## Interaction-Minimization Priority
+やり取り回数を減らし、1回の指示で完走するための優先規則を定義する。
 
-1. ユーザーが要件定義を書く（Codexへ依頼）
-2. Codexが実装し、自動テストを実行する
-3. ユーザーが実際に起動して手動テストする
-4. 手動テストが `OK` の場合:
-   - Codexが `要件定義_プロジェクト名.md` に「詳細設計」を追記する
-5. 詳細設計追記後:
-   - ユーザーとCodexで、`要件定義_プロジェクト名.md` の「要件定義」セクションに次の希望実装を追記・更新する
-6. Codexが次の実装とテストを行う
-7. 3に戻って反復する
+- `RULE-DEV-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..005` を常に参照し、実装判断へ適用する。
+- `RULE-DEV-IMPL-002` 実装モードでは `Fast Path` を既定とし、Plan提示だけで停止しない。
+- `RULE-DEV-IMPL-003` `Full Path` は `RULE-DEV-VERIFY-003` の条件に一致した場合のみ適用する。
+- `RULE-DEV-IMPL-004` 不確定事項は、即時ブロッカーでない限り仮定を明示して先に実装と検証を進める。
+
+## Primary Workflow (Execute-First Loop)
+実装モードでは「最小実装 -> 最小検証 -> 1コミット」を既定の反復ループとする。
+
+1. ユーザーが実装系依頼を出す
+2. Codexが最小差分を実装し、Light VerifyまたはFull Verifyを実行する
+3. Codexが1コミットで完了させる（`コミットしない` 指示時は除く）
+4. 必要時のみ手動テストや追加設計へ進む
 
 重要ルール:
-- ユーザー手動テストが `OK` になる前に、詳細設計を確定しない。
-- 手動テストが `NG` の場合は、詳細設計追記を行わず、要件Delta更新 -> 再実装に戻る。
-- 詳細設計は「実際に動いた挙動」を後追いで構造化して記録する（推測で確定しない）。
+- 小変更では工程儀式より完走を優先する。
+- 安全性を損なう操作（破壊的変更）は確認を優先する。
 
 ## Target File Extraction Rules (Resume Recognition)
 開発再開ターンで列挙対象を決定する固定ルールを定義する。
@@ -37,6 +37,15 @@
 - `RULE-DEV-COMMIT-001..008`
 - `RULE-DEV-WORKLOG-001..015`
 
+## Verification Modes (Two-Stage)
+検証は二段階運用とし、既定は `Light Verify` とする。
+
+- `RULE-DEV-VERIFY-001` `Light Verify`（既定）は `cargo fmt --all` + `対象テスト` または `cargo test` を実行し、`clippy` は任意とする。
+- `RULE-DEV-VERIFY-002` `Full Verify` は `cargo fmt --all` `cargo clippy --all-targets --all-features -- -D warnings` `cargo test` `cargo build` の順で実行する。
+- `RULE-DEV-VERIFY-003` 次のいずれかで `Full Verify` を必須化する: 依存更新（`Cargo.toml`/`Cargo.lock`）、広範囲改修、壊しやすい既知領域の変更、ユーザー明示要求。
+- `RULE-DEV-VERIFY-004` `Light Verify` では `cargo build` を省略してよいが、実行可能成果物が必要な依頼では `cargo build` を追加する。
+- `RULE-DEV-VERIFY-005` 最終報告では、実行した検証モード（Light/Full）と実行コマンドを1-2行で記録する。
+
 ## External Config Sync Rules
 外部設定ファイルの同期・反映に関する固定ルールを定義する。
 
@@ -45,11 +54,11 @@
 - `RULE-DEV-CONFIG-003` 同期操作は常にコピーで行い、同期元ファイルの移動・削除を禁止する。
 - `RULE-DEV-CONFIG-004` 同期対象は `*.default.json` のみとし、`*.override.json` と `%AppData%` 配下の実行時データをプロジェクト原本へ自動コピーしない。
 - `RULE-DEV-CONFIG-005` ユーザーが反映OKを明示した場合のみ、開発モードで `%AppData%\\<AppName>\\*.override.json` から `assets/config/*.default.json` へ反映してよい。
-- `RULE-DEV-CONFIG-006` Step 4 または Step 8 の報告では、同期元パスと同期先2箇所の成否を短く記録する。
-- `RULE-DEV-CONFIG-007` 外部設定を伴う実装では、Step 1 で `config_contract` を1行記録する。既定値は `default=assets/config/*.default.json` `runtime=%AppData%\\<AppName>\\*.override.json` とする。
-- `RULE-DEV-CONFIG-008` Step 4 では設定形式の静的検査を必須実行し、最低限 `assets/config/*.default.json` の存在、`%AppData%\\<AppName>\\*.override.json` の運用契約適合、`assets/config/` または `config/` 配下の非JSON設定ファイル/参照を機械検出する。
-- `RULE-DEV-CONFIG-009` `RULE-DEV-CONFIG-008` で違反（非JSON形式の設定ファイル/参照を含む）が出た場合は実装完了判定を不可とし、修正完了まで `User Manual Gate` へ進まない。
-- `RULE-DEV-CONFIG-010` Step 8 と最終報告には `config_policy_validation`（`PASS` / `FAIL`）を必ず記録する。
+- `RULE-DEV-CONFIG-006` 設定同期を行った場合のみ、検証または最終報告で同期元と同期先2箇所の成否を短く記録する。
+- `RULE-DEV-CONFIG-007` 外部設定を伴う実装では、要件整理時に `config_contract` を1行記録する。既定値は `default=assets/config/*.default.json` `runtime=%AppData%\\<AppName>\\*.override.json` とする。
+- `RULE-DEV-CONFIG-008` 設定ファイルを変更した場合、または `Full Verify` 実行時は設定形式の静的検査を必須実行し、`assets/config/*.default.json` の存在と非JSON設定参照を機械検出する。
+- `RULE-DEV-CONFIG-009` `RULE-DEV-CONFIG-008` で違反が出た場合は実装完了判定を不可とし、修正完了までコミットしてはならない。
+- `RULE-DEV-CONFIG-010` 設定検証を実施した場合は、最終報告に `config_policy_validation`（`PASS` / `FAIL`）を必ず記録する。
 - `RULE-DEV-CONFIG-011` 設定ファイルの拡張子・相対パスは単一定義（共有定数または共通ローダー）で管理し、他箇所での拡張子文字列直書きを禁止する。
 
 ## Knowledge Update Rules
@@ -57,7 +66,7 @@
 
 - `RULE-DEV-KB-001` 再利用可能な原因/対処を特定した場合のみ、`User Manual Gate` で `OK` 後に `C:\Users\gonec\RustProjects\KNOWLEDGE.md` へ追記してよい。
 - `RULE-DEV-KB-002` `KNOWLEDGE.md` の更新は追記方式（add-only）を既定とし、既存 `kb_id` の意味変更や削除はユーザー明示指示がある場合のみ許可する。
-- `RULE-DEV-KB-003` Step 6 または Step 7 で要件定義書を更新する際は、`target_tags` に一致する `knowledge_refs` を同期する。
+- `RULE-DEV-KB-003` 要件定義書を更新する場合は、`target_tags` に一致する `knowledge_refs` を同期する。
 
 ## Commit Intent Routing Rules
 コミット指示時のコミット先を、曖昧入力と誤字を許容して決定する。
@@ -70,68 +79,86 @@
 - `RULE-DEV-COMMIT-ROUTE-006` コミット先が一意に決まらない場合のみ、1回だけ確認質問を行う。確認回答後は同一ターン内で再質問しない。
 - `RULE-DEV-COMMIT-ROUTE-007` 明示指定（例: パス指定、`AGENTS` 指定、プロジェクト名指定）がある場合は `RULE-DEV-COMMIT-ROUTE-004..006` より優先する。
 
-## Mandatory Development Loop (Fixed Order)
-次の順序を固定し、飛ばさない。
+## Mandatory Development Loop (Fast-First Order)
+次の順序を固定し、既定は `Fast Path` とする。
 
-### 0. Intake
+### Fast Path (Default)
+0. Intake
 - 目的と完了条件を1文で定義する。
 - `target_project_root` を確定する。
+- 破壊的変更の有無だけ先に判定し、該当時のみ確認する。
+
+1. Delta Requirements
+- 変更要求を最小単位で定義する。
+- 即時ブロッカーでない不足情報は仮定として明記する。
+- 外部設定を扱う場合のみ `RULE-DEV-CONFIG-007` の `config_contract` を記録する。
+
+2. Minimal Implementation
+- 最小差分のみ実装する。
+
+3. Light Verify
+- `RULE-DEV-VERIFY-001` に従って検証する。
+- `RULE-DEV-VERIFY-003` に該当した場合は `Full Path` へ切り替える。
+
+4. Commit & Handoff
+- `RULE-DEV-WORKLOG-013..015` の Preflight を実施する。
+- `1リクエスト=1コミット` を既定としてコミットする（ユーザーが `コミットしない` と明示した場合を除く）。
+- 変更点/検証結果/残課題を短く報告する。
+
+### Full Path (Conditional)
+0. Intake
+- Fast Path の0を実施する。
 - Rustプロジェクト判定として `Cargo.toml` の存在を確認する（無い場合は実装に進まない）。
-- 要件定義書 `要件定義_プロジェクト名.md` の存在と最小セクションを確認する。
-- この時点で「今回サイクルで触る要件」と「触らない要件」を明示する。
-- ゲートテンプレートをこの時点で必ず1行記録する。
-- 作業前出力（readaloud JSON）を必ず先に行う。
 
-### 1. Delta Requirements
+1. Delta Requirements
 - 変更要求を `req_id` 単位で定義する。
-- 影響I/O（保存データ、入力、設定、描画、時間依存）を必ず書く。
-- ユーザー手動確認で使う確認観点（最小チェックリスト）を1つ以上含める。
-- 外部設定を扱う `req_id` では `RULE-DEV-CONFIG-007` の `config_contract` を必ず併記する。
+- 影響I/O（保存データ、入力、設定、描画、時間依存）を記録する。
+- 必要な手動確認観点を1つ以上含める。
 
-### 2. Test Design First
+2. Test Design First
 - `req_id` ごとに `test_id` を作成し、1対1で対応させる。
 
-### 3. Minimal Implementation
+3. Minimal Implementation
 - テストを満たす最小差分のみ実装する。
 
-### 4. Codex Verification (Rust)
-- 既定の検証コマンド順序:
-  1. `cargo fmt --all`
-  2. `cargo clippy --all-targets --all-features -- -D warnings`
-  3. `cargo test`
-  4. `cargo build`
-  5. GUIスモーク（Bevy等）: `cargo run` を起動し、即時クラッシュなしを確認する（ユーザー指示がある場合のみ）。
-- `RULE-DEV-BUILD-001` 実装サイクル完了時に手動テストへ引き渡すため、Step 4 では `cargo build` を必須実行し、`target/debug` 成果物を最新化する。
-- `RULE-DEV-BUILD-002` バイナリターゲットがある場合、`cargo build` 後に実行可能ファイルのパス（Windows例: `target\\debug\\<bin_name>.exe`）を報告する。
-- `RULE-DEV-FONT-001` Step 4 ではフォントポリシー検証を必須実行し、要件定義書で指定されたフォント（未指定時は `assets/fonts/NotoSansJP-Regular.ttf`）の実在を確認する。
-- `RULE-DEV-FONT-002` Step 4 では静的検査で禁止パターンを機械検出する。最低限の検査対象は `C:\\Windows\\Fonts`（および `/Windows/Fonts`）の直参照、`.ttc` 参照、`TextFont` での `Handle::default()` 依存とする。
-- `RULE-DEV-FONT-003` `RULE-DEV-FONT-002` の検査はローカル検証またはCIに必ず組み込み、手動確認前に実行する。
-- `RULE-DEV-FONT-004` フォント実在確認または禁止パターン検査で違反が出た場合は実装完了判定を不可とし、違反箇所を修正するまで `User Manual Gate` へ進まない。
-- `RULE-DEV-CONFIG-012` Step 4 では `RULE-DEV-CONFIG-008` の静的検査結果（PASS/FAIL）を必ず出力する。
-- 失敗時は、エラー全文、原因候補、再実行方針のみを短く報告する。
+4. Codex Verification (Full)
+- `RULE-DEV-VERIFY-002` を実行する。
+- `RULE-DEV-BUILD-001` `RULE-DEV-BUILD-002` `RULE-DEV-FONT-001..004` `RULE-DEV-CONFIG-012` を適用する。
 
-### 5. User Manual Gate
-- GUIアプリの場合: ユーザーが手動確認できる状態まで起動手順を提示する（OK/NGを記録）。
-- `NG` の場合は詳細設計を更新せず、Delta更新へ戻る。
-- `OK` の場合は Step 6 へ進む。
+5. User Manual Gate
+- GUIアプリまたはユーザー要求時のみ、手動確認手順を提示する（OK/NGを記録）。
+- `NG` の場合は Delta 更新へ戻る。
 
-### 6. Post-OK Design Update
-- `要件定義_プロジェクト名.md` に詳細設計を追記する。
-- 詳細設計には、今回 `OK` になった挙動のみを書く。
-- `RULE-DEV-LOOP-009` コミット実行前に Step 6（詳細設計）と Step 7（要件定義）の更新を完了しなければならない（未更新のままコミット禁止）。
+6. Post-OK Design Update
+- `要件定義_プロジェクト名.md` に、今回 `OK` になった挙動のみ追記する。
+- `RULE-DEV-LOOP-009` の条件に該当する場合のみ、コミット前に Step 7 まで実施する。
 
-### 7. Next Cycle Requirement Sync
-- `RULE-DEV-LOOP-007` コミット実行前に、次サイクルの要求を `要件定義_プロジェクト名.md` の「要件定義」へ追記または更新する。
-- `RULE-DEV-LOOP-008` 次サイクル要求が未確定の場合は「未確定」と明示してから Step 8 に進む。
+7. Next Cycle Requirement Sync
+- `RULE-DEV-LOOP-007` の条件に該当する場合のみ、次サイクル要求を更新する。
+- 未確定なら `RULE-DEV-LOOP-008` に従って `未確定` と明示する。
 
-### 8. Record & Handoff
-- `RULE-DEV-RESULT-001..005` の最小出力要件は `AGENTS/15_operation_gate_rules.md` を唯一の正として適用する。
-- `RULE-DEV-BUILD-003` バイナリターゲットがある場合、`result.json` に `executable_path`（相対または絶対）を記録する。
-- `RULE-DEV-FONT-005` `result.json` には `font_policy` を記録し、`required_font` `resolved_font_path` `validation`（PASS/FAIL）を含める。
-- 発話出力先の固定は `AGENTS/15_operation_gate_rules.md` を唯一の正として適用する。
+8. Record & Handoff
+- `RULE-DEV-RESULT-001..005` の要件に従って結果を記録する。
+
+## Build / Font / Loop Detail Rules
+Fast/Full Path で参照する補助ルールを定義する。
+
+- `RULE-DEV-BUILD-001` `cargo build` は `Full Verify` 実行時、または実行可能成果物が必要な依頼で必須とする。
+- `RULE-DEV-BUILD-002` `cargo build` を実行し、バイナリターゲットがある場合は実行可能ファイルのパス（例: `target\\debug\\<bin_name>.exe`）を報告する。
+- `RULE-DEV-BUILD-003` `result.json` を出力する場合、バイナリターゲットがあれば `executable_path`（相対または絶対）を記録する。
+- `RULE-DEV-FONT-001` フォントポリシー検証は、UI/フォント関連変更時または `Full Verify` 実行時に必須とする。
+- `RULE-DEV-FONT-002` 最低限の禁止検査対象は `C:\\Windows\\Fonts`（および `/Windows/Fonts`）の直参照、`.ttc` 参照、`TextFont` での `Handle::default()` 依存とする。
+- `RULE-DEV-FONT-003` `RULE-DEV-FONT-002` の検査はローカル検証またはCIに組み込む。
+- `RULE-DEV-FONT-004` フォント実在確認または禁止パターン検査で違反が出た場合は実装完了判定を不可とする。
+- `RULE-DEV-FONT-005` `result.json` を出力する場合は `font_policy`（`required_font` `resolved_font_path` `validation`）を記録する。
+- `RULE-DEV-CONFIG-012` 設定静的検査を実施した場合は、その結果（PASS/FAIL）を最終報告へ必ず出力する。
+- `RULE-DEV-LOOP-007` 次サイクル要件の更新は、要件定義書更新が今回スコープに含まれる場合のみ必須とする。
+- `RULE-DEV-LOOP-008` `RULE-DEV-LOOP-007` が適用され、次サイクル要求が未確定の場合は `未確定` と明示する。
+- `RULE-DEV-LOOP-009` Step 6/7 のコミット前完了義務は、要件定義書を本サイクルで更新する運用時のみ適用する。
 
 ## Priority Order
 競合時は次の優先順で判断する。
 1. 安全性と決定的実行制約
-2. `AGENTS.md`（インデックス）と、そこから参照される分割ルールファイル
-3. ローカル実装都合
+2. やり取り回数を減らす観点（実装完走の優先）
+3. `AGENTS.md`（インデックス）と、そこから参照される分割ルールファイル
+4. ローカル実装都合

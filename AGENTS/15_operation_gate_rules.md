@@ -1,25 +1,35 @@
 # AGENTS Split: Operation Gate Rules
 
+## Interaction-Minimization Priority
+やり取り回数を減らして実装を完走しやすくする優先規則を定義する。
+
+- `RULE-OG-IMPL-001` 本ファイルは `AGENTS.md` の `RULE-INDEX-IMPL-001..005` を常に参照し、運用判断へ適用する。
+- `RULE-OG-IMPL-002` 優先順位は `安全性（破壊的変更の確認を含む） > やり取り回数を減らす観点 > その他の運用規則` とする。
+- `RULE-OG-IMPL-003` 即時ブロッカーでない不確定事項は、質問で停止せず仮定を明示して実装を先行する。
+- `RULE-OG-IMPL-004` 追加質問は「破壊的変更」「不可逆操作」「機密情報変更」「対象プロジェクトが一意に決まらない」のみ許可する。
+
 ## Startup Context Rules
-開発再開時に必要なコンテキスト確認と、実装モード判定を固定する。
+開発再開時に必要なコンテキスト確認と、実装/相談モード判定を固定する。
 
 - `RULE-PROJ-CONTEXT-001` `要件定義_プロジェクト名.md` には `# 要件定義` 直下で `target_project_root: <absolute_path>` を必須記載する。
 - `RULE-PROJ-CONTEXT-002` `target_project_root` は当該サイクルで確定した `target_project_root` と完全一致させる。変更時は `# 変更履歴` に記録する。
 - `RULE-PROJ-CONTEXT-003` 要件定義書の新規作成時は初版から `target_project_root` を記載し、空値を禁止する。
 - `RULE-PROJ-CONTEXT-004` 開発再開ターンの開始時に、Codex は要件定義書の `target_project_root` 記載有無と値一致を確認し、不一致時は実装前に修正する。
-- `RULE-PROJ-PLAN-001` Codex は既定で、要件整理・論点分解・テスト観点設計までを行い、実装/ビルド/副作用実行は行わない。
-- `RULE-PROJ-PLAN-002` 実装モードへ移行する条件は、ユーザー入力に実行開始を示す明示キーワードが含まれる場合のみとする。移行後の実行手順は `AGENTS/20_development_rules.md` の `Mandatory Development Loop` を唯一の正として適用する。
-- `RULE-PROJ-PLAN-003` 明示キーワード例: `実装して` `修正して` `変更して` `追加して` `作って` `削除して` `コードを書いて` `ビルドして` `buildして` `exeを作って` `cargo run` `cargo test`
-- `RULE-PROJ-PLAN-004` 明示キーワードがない依頼では、コード変更・ファイル更新・ビルド実行・副作用のあるコマンド実行を行わず、`Mandatory Development Loop` の Step 0-8 と `RULE-SPEECH-001..002` も適用しない。
-- `RULE-PROJ-PLAN-005` 依頼が曖昧な場合は、実装せずに要件確認を優先する。
+- `RULE-PROJ-PLAN-001` 依頼が実装系意図を含む場合、Codex は Plan-only で停止せず `AGENTS/20_development_rules.md` の実装フローへ直接進む。
+- `RULE-PROJ-PLAN-002` 依頼が相談系意図のみ（案出し/比較/調査/説明）で構成される場合のみ、Plan中心で返し実装は行わない。
+- `RULE-PROJ-PLAN-003` 実装系意図の例: `実装` `修正` `変更` `追加` `作成` `削除` `バグ修正` `リファクタ` `コード` `build` `cargo` `test` `commit`
+- `RULE-PROJ-PLAN-004` 相談系意図の例: `案を出して` `比較して` `調査して` `設計だけ` `実装しないで` `方針だけ`
+- `RULE-PROJ-PLAN-005` 実装可能だが情報不足がある場合は、停止して質問せず仮定を明示して進める。
+- `RULE-PROJ-PLAN-006` 破壊的変更（広範囲削除、不可逆マイグレーション、秘密情報更新）は1回だけ確認してから実行する。
+- `RULE-PROJ-PLAN-007` 実装依頼では `1リクエスト=1コミット` を既定とし、ユーザーが `コミットしない` と明示した場合のみコミットを省略する。
 
 ## Speech Output Rules
-開始時/終了時の発話用JSON出力に関する固定ルールを定義する。
+開始時/終了時の発話用JSON出力に関するルールを定義する。
 
-- `RULE-SPEECH-001` 開始時の readaloud JSON は `Mandatory Development Loop` の Step 0 で必ず出力する。
-- `RULE-SPEECH-002` 終了時の readaloud JSON は `Mandatory Development Loop` の Step 8 で必ず出力する。
-- `RULE-SPEECH-003` `RULE-SPEECH-001..002` は実装モード時のみ適用し、Plan-First（非実装モード）では適用しない。
-- `RULE-SPEECH-004` 発話用JSONの出力先は常に `C:\Users\gonec\RustProjects\event.json` に固定する。
+- `RULE-SPEECH-001` readaloud JSON は既定で無効とする。
+- `RULE-SPEECH-002` ユーザーが明示要求した場合のみ readaloud JSON を生成する。
+- `RULE-SPEECH-003` 生成時の出力先は常に `C:\Users\gonec\RustProjects\event.json` に固定する。
+- `RULE-SPEECH-004` readaloud JSON の有無は実装フローの進行条件にしない。
 
 ## Commit Message Rules
 コミットメッセージの言語と記載対象を固定する。
@@ -37,20 +47,20 @@
 コミット間の実装概要ログ運用と、コミットメッセージ生成時の根拠を固定する。
 
 - `RULE-DEV-WORKLOG-001` コミット間ログの出力先は `C:\Users\gonec\RustProjects\CODEX_WORKLOG.md` に固定する。
-- `RULE-DEV-WORKLOG-002` `RULE-DEV-WORKLOG-001` のファイルが存在しない場合は、コミット関連処理の前にテンプレート付きで新規作成する。
-- `RULE-DEV-WORKLOG-003` 実装中の作業ログは Markdown の追記方式とし、時系列（古い順）を維持する。
-- `RULE-DEV-WORKLOG-004` 各ログ行には最低限 `timestamp` `scope([AGENT]/[SOFT])` `summary` を含める。
+- `RULE-DEV-WORKLOG-002` `CODEX_WORKLOG` は既定で無効とし、`大規模変更` `複数コミット予定` `調査中心タスク` `ユーザー明示要求` のいずれかで有効化する。
+- `RULE-DEV-WORKLOG-003` `RULE-DEV-WORKLOG-002` で有効化された場合に限り、`RULE-DEV-WORKLOG-001` のファイルが存在しなければテンプレート付きで新規作成する。
+- `RULE-DEV-WORKLOG-004` 有効時の各ログ行には最低限 `timestamp` `scope([AGENT]/[SOFT])` `summary` を含める。
 - `RULE-DEV-WORKLOG-005` ユーザーが編集中ログの表示を要求した場合、`CODEX_WORKLOG.md` の現内容を提示してよい。
-- `RULE-DEV-WORKLOG-006` コミットメッセージ作成時は、必ず `git diff --staged` と `CODEX_WORKLOG.md` を突合し、staged差分に存在する事実のみを採用する。
+- `RULE-DEV-WORKLOG-006` コミットメッセージ作成時は、必ず `git diff --staged` を根拠にし、worklog有効時のみ `CODEX_WORKLOG.md` と突合する。
 - `RULE-DEV-WORKLOG-007` staged差分にAGENTS系ファイルとソフト実装系ファイルが混在する場合は、コミットを分割して個別メッセージを作成する（ユーザー明示許可がある場合のみ混在コミット可）。
 - `RULE-DEV-WORKLOG-008` コミットメッセージのタイトルと本文は、`RULE-DEV-WORKLOG-006` の突合結果を根拠に生成する。
-- `RULE-DEV-WORKLOG-009` コミット成功後は `CODEX_WORKLOG.md` をテンプレート状態へリセットし、前コミット分のエントリを残さない。
-- `RULE-DEV-WORKLOG-010` コミット失敗時は `CODEX_WORKLOG.md` をリセットせず、失敗理由を追記して再試行に備える。
+- `RULE-DEV-WORKLOG-009` コミット成功後、worklog有効時のみ `CODEX_WORKLOG.md` をテンプレート状態へリセットし、前コミット分のエントリを残さない。
+- `RULE-DEV-WORKLOG-010` コミット失敗時、worklog有効時のみ `CODEX_WORKLOG.md` をリセットせず、失敗理由を追記して再試行に備える。
 - `RULE-DEV-WORKLOG-011` 変更分類は `AGENTS.md` または `AGENTS/` 配下を `AGENT`、それ以外の実装/設定/テスト変更を `SOFT` とする。
 - `RULE-DEV-WORKLOG-012` `CODEX_WORKLOG.md` の新規作成またはリセット時は、`# CODEX Worklog` `## Current Cycle` `## Entries` の3見出しを必須とする。
-- `RULE-DEV-WORKLOG-013` コミット実行直前に `Commit Preflight` を必ず実施し、`CODEX_WORKLOG.md` の最新行へ `preflight` 結果を追記する。
-- `RULE-DEV-WORKLOG-014` `Commit Preflight` の必須チェックは `scope整合(AGENT/SOFT)` `git diff --staged 突合完了` `コミットメッセージ本文1行以上(行頭「・」)` の3点とする。
-- `RULE-DEV-WORKLOG-015` `Commit Preflight` のいずれかが `FAIL` の場合、`git commit` を実行してはならない。
+- `RULE-DEV-WORKLOG-013` コミット実行直前に `Commit Preflight` を必ず実施する。
+- `RULE-DEV-WORKLOG-014` worklog有効時の `Commit Preflight` は `scope整合(AGENT/SOFT)` `git diff --staged と worklog 突合完了` `コミットメッセージ本文1行以上(行頭「・」)` の3点を必須チェックとする。
+- `RULE-DEV-WORKLOG-015` worklog無効時の `Commit Preflight` は簡略化を許可し、`git diff --staged 確認` `コミットメッセージ形式適合` `実行した検証モード（Light/Full）の記録` の3点を必須チェックとし、いずれかが `FAIL` の場合は `git commit` を実行してはならない。
 
 ## Result Artifact Rules
 実行結果ファイルの最小出力要件を固定する。
@@ -64,4 +74,4 @@
 ## Output Coupling Rule
 通常出力制約と発話ルールの境界条件を固定する。
 
-- `RULE-OUT-COST-003` 開始時/終了時の読み上げJSONは、`RULE-PROJ-PLAN-002` により実装モードへ移行している場合のみ必須とする。該当時は本ファイルの最小出力制限の例外として扱う。
+- `RULE-OUT-COST-003` 読み上げJSONは既定で必須にせず、ユーザー明示要求時のみ本ファイルの最小出力制限の例外として扱う。
