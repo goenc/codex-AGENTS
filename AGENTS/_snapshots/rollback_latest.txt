@@ -1,3 +1,1 @@
-Copy-Item 'C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0454\10_project_rules.md' 'C:\Users\gonec\RustProjects\AGENTS\10_project_rules.md' -Force
-Copy-Item 'C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0454\99_change_log.md' 'C:\Users\gonec\RustProjects\AGENTS\99_change_log.md' -Force
-Copy-Item 'C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0454\rollback_latest.txt' 'C:\Users\gonec\RustProjects\AGENTS\_snapshots\rollback_latest.txt' -Force
+C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-2245
