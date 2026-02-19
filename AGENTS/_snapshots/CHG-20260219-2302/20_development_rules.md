@@ -70,22 +70,6 @@
 - `RULE-DEV-COMMIT-006` 2行目以降に変更点を列挙する場合、各行の行頭は必ず `・` とする。
 - `RULE-DEV-COMMIT-007` 2行目以降の列挙では、`-` `*` など `・` 以外の箇条書き記号を使用しない。
 
-## Commit Worklog Rules
-コミット間の実装概要ログ運用と、コミットメッセージ生成時の根拠を固定する。
-
-- `RULE-DEV-WORKLOG-001` コミット間ログの出力先は `C:\Users\gonec\RustProjects\CODEX_WORKLOG.md` に固定する。
-- `RULE-DEV-WORKLOG-002` `RULE-DEV-WORKLOG-001` のファイルが存在しない場合は、コミット関連処理の前にテンプレート付きで新規作成する。
-- `RULE-DEV-WORKLOG-003` 実装中の作業ログは Markdown の追記方式とし、時系列（古い順）を維持する。
-- `RULE-DEV-WORKLOG-004` 各ログ行には最低限 `timestamp` `scope([AGENT]/[SOFT])` `summary` を含める。
-- `RULE-DEV-WORKLOG-005` ユーザーが編集中ログの表示を要求した場合、`CODEX_WORKLOG.md` の現内容を提示してよい。
-- `RULE-DEV-WORKLOG-006` コミットメッセージ作成時は、必ず `git diff --staged` と `CODEX_WORKLOG.md` を突合し、staged差分に存在する事実のみを採用する。
-- `RULE-DEV-WORKLOG-007` staged差分にAGENTS系ファイルとソフト実装系ファイルが混在する場合は、コミットを分割して個別メッセージを作成する（ユーザー明示許可がある場合のみ混在コミット可）。
-- `RULE-DEV-WORKLOG-008` コミットメッセージのタイトルと本文は、`RULE-DEV-WORKLOG-006` の突合結果を根拠に生成する。
-- `RULE-DEV-WORKLOG-009` コミット成功後は `CODEX_WORKLOG.md` をテンプレート状態へリセットし、前コミット分のエントリを残さない。
-- `RULE-DEV-WORKLOG-010` コミット失敗時は `CODEX_WORKLOG.md` をリセットせず、失敗理由を追記して再試行に備える。
-- `RULE-DEV-WORKLOG-011` 変更分類は `AGENTS.md` または `AGENTS/` 配下を `AGENT`、それ以外の実装/設定/テスト変更を `SOFT` とする。
-- `RULE-DEV-WORKLOG-012` `CODEX_WORKLOG.md` の新規作成またはリセット時は、`# CODEX Worklog` `## Current Cycle` `## Entries` の3見出しを必須とする。
-
 ## Commit Intent Routing Rules
 コミット指示時のコミット先を、曖昧入力と誤字を許容して決定する。
 

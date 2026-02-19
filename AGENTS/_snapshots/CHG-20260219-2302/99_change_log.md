@@ -1,13 +1,6 @@
 # AGENTS Change Log
 
 ## Records
-- `change_id`: `CHG-20260219-2302`
-- `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
-- `rules_added_or_updated`: `RULE-DEV-WORKLOG-001..012`
-- `validation_result`: `PASS`（参照先存在・見出し存在・ルールID重複なし・優先順位矛盾なし）
-- `rollback_point`: `C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-2302\`
-- `notes`: `CODEX_WORKLOG.md をコミット間ログの単一出力先として固定し、staged差分突合・AGENT/SOFT混在時の分割コミット・コミット後リセット手順を追加`
-
 - `change_id`: `CHG-20260219-2245`
 - `target_files`: `AGENTS/20_development_rules.md`, `AGENTS/99_change_log.md`, `AGENTS/_snapshots/rollback_latest.txt`
 - `rules_added_or_updated`: `RULE-DEV-COMMIT-005..007`
