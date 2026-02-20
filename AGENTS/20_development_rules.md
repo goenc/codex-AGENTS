@@ -15,6 +15,14 @@
 - `RULE-DEV-FLOW-005` 入力形式が崩れていても自動整形で続行する。
 - `RULE-DEV-FLOW-006` 不明点は `unknown` と明示し、推測で埋めない。
 
+## Commit Message Policy
+- `RULE-DEV-COMMITMSG-001` すべてのコミットは、コミットメッセージを日本語で記述し、必ず次の2層構造にする。
+  - 1行目: 要約（何をやったか）
+  - 2行目以降: 変更内容（最低1行以上）
+- `RULE-DEV-COMMITMSG-002` 2行目以降の各行は、必ず `- 何を: ` で開始する。これ以外のラベル（例: 影響/理由/背景/検証/Why/How/Notes）は禁止する。
+- `RULE-DEV-COMMITMSG-003` 1機能のみの実装で詳細が無い場合、2行目以降の内容は1行目と同一内容でもよい。ただし2行目以降は省略禁止（最低1行必須）。
+- `RULE-DEV-COMMITMSG-004` `1req=1commit` の粒度方針と整合するよう、2行目以降は当該reqの変更点のみを列挙し、無関係な事項を混ぜない。
+
 ## Source-Driven Determination
 - `RULE-DEV-SOURCE-001` 仕様確定はソースコードを第一優先とする（Rustでは `Cargo.toml` + `src/`）。
 - `RULE-DEV-SOURCE-002` `不変条件_<project>.md` に反する変更は実装しない。

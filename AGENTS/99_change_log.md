@@ -5,6 +5,13 @@
 プロジェクト固有の実装ログ、運用ログ、障害ログは記録しない。
 
 ## Records
+- change_id: CHG-20260221-0007
+- target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-DEV-COMMITMSG-001..004
+- validation_result: PASS（重複IDなし、適用箇所はDevelopment Rules内、既存ルール意味変更なし）
+- rollback_point: none
+- notes: commit message仕様を日本語2層構造「- 何を:」のみに固定
+
 - change_id: CHG-20260220-1743
 - target_files: AGENTS/15_operation_gate_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-OG-STARTUP-010
