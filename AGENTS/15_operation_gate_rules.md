@@ -12,6 +12,7 @@
 - `RULE-OG-STARTUP-007` `ignore_initially` は初期探索の強制除外として必ず適用し、明示解除まで探索対象に含めない。
 - `RULE-OG-STARTUP-008` `read_first` がある場合は初期読込順を固定し、未定義キーは `unknown` として保持のみ行う。
 - `RULE-OG-STARTUP-009` `RULE-OG-STARTUP-003..006` のいずれかが未成立の場合、実装を開始せず不足項目と再実行方針のみ報告する。
+- `RULE-OG-STARTUP-010` `再開_<project>.md` と `不変条件_<project>.md` の `<project>` 識別子は完全一致必須とする。一致しない場合は実装を開始せず、不一致内容と修正方針のみ報告する。
 
 ## Intent Gate
 - `RULE-OG-INTENT-001` 実装系意図を含む依頼は Plan-only で停止せず、`AGENTS/20_development_rules.md` の実装フローへ進む。

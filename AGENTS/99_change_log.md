@@ -5,6 +5,13 @@
 プロジェクト固有の実装ログ、運用ログ、障害ログは記録しない。
 
 ## Records
+- change_id: CHG-20260220-1743
+- target_files: AGENTS/15_operation_gate_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-OG-STARTUP-010
+- validation_result: PASS
+- rollback_point: none
+- notes: project識別子不一致防止
+
 - change_id: CHG-20260220-1735
 - target_files: AGENTS.md, AGENTS/10_project_rules.md, AGENTS/15_operation_gate_rules.md, AGENTS/20_development_rules.md, AGENTS/30_output_rules.md, AGENTS/98_maintenance_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-INDEX-IMPL-008, RULE-PROJ-ARTIFACT-001..006, RULE-PROJ-SOT-001..004, RULE-PROJ-ENTRY-001..003, RULE-OG-STARTUP-001..009, RULE-OG-INTENT-001..002, RULE-DEV-FLOW-001..006, RULE-DEV-SOURCE-001..003, RULE-DEV-VERIFY-001..004, RULE-DEV-PROMOTE-001..003, RULE-OUT-001..006, RULE-MAINT-001..006
