@@ -5,6 +5,13 @@
 プロジェクト固有の実装ログ、運用ログ、障害ログは記録しない。
 
 ## Records
+- change_id: CHG-20260221-0346
+- target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-DEV-VERIFY-005..007
+- validation_result: PASS（重複IDなし、追記先はDevelopment Rulesのみ、実装後ビルド必須運用を追加）
+- rollback_point: none
+- notes: 実装変更を含むreqのコミット前ビルドを必須化。Rustは `cargo build` を必須実行、非Rustはentry_points対応の最小ビルドを必須実行。
+
 - change_id: CHG-20260221-0248
 - target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-DEV-COMMITMSG-005..006, RULE-DEV-EOL-001..002

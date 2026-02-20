@@ -39,6 +39,9 @@
 - `RULE-DEV-VERIFY-002` Rustの軽量検証は `cargo fmt --all` と `cargo test`（または影響範囲テスト）を基本とする。
 - `RULE-DEV-VERIFY-003` 非Rustは `entry_points` に対応する最小テスト/検証コマンドを実行する。
 - `RULE-DEV-VERIFY-004` 検証失敗時はコミットしない。
+- `RULE-DEV-VERIFY-005` 実装変更を含むreqでは、コミット前に必ずビルド検証を実行しなければならない。ビルド未実行のままコミットしてはならない。
+- `RULE-DEV-VERIFY-006` Rustのビルド検証は `cargo build` を必須とし、`RULE-DEV-VERIFY-002` の検証に追加で実行する。
+- `RULE-DEV-VERIFY-007` 非Rustのビルド検証は `entry_points` に対応する最小ビルドコマンドを必須実行する。
 
 ## Build Procedure (Windows EXE Lock Prevention)
 - `RULE-DEV-BUILDWIN-001` Windowsでビルドする場合、対象アプリ（exe）の起動有無に関係なく、ビルド開始前に毎回プロセス終了を試行する。
