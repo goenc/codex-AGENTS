@@ -34,6 +34,32 @@
 - `RULE-DEV-VERIFY-003` 非Rustは `entry_points` に対応する最小テスト/検証コマンドを実行する。
 - `RULE-DEV-VERIFY-004` 検証失敗時はコミットしない。
 
+## Build Procedure (Windows EXE Lock Prevention)
+- `RULE-DEV-BUILDWIN-001` Windowsでビルドする場合、対象アプリ（exe）の起動有無に関係なく、ビルド開始前に毎回プロセス終了を試行する。
+- `RULE-DEV-BUILDWIN-002` 同名プロセス巻き込み防止のため、可能な限り `ExecutablePath` のフルパス一致で終了対象を特定する。
+- `RULE-DEV-BUILDWIN-003` 対象プロセスが存在しない場合はエラーとして扱わず、無害として続行する。
+- `RULE-DEV-BUILDWIN-004` 本運用は管理者権限で起動しない前提とし、同一ユーザー権限で停止可能な範囲を対象にする。
+- `RULE-DEV-BUILDWIN-005` Codexのビルド前フックとして `pwsh -File build.ps1` の実行を推奨する。
+- `RULE-DEV-BUILDWIN-006` PowerShell実装例は次を基準とする。
+
+```powershell
+# build.ps1（例）
+$exePath = "C:\path\to\YourApp.exe"
+
+# 実行中なら終了（存在しなくても無視して続行）
+Get-CimInstance Win32_Process |
+  Where-Object { $_.ExecutablePath -eq $exePath } |
+  ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+
+# ここから通常ビルド
+cargo build
+```
+
+```powershell
+# Codexビルド前フック実行例
+pwsh -File build.ps1
+```
+
 ## Contract Promotion
 事故や再発防止が必要な場合のみ、不変条件への昇格を検討する。
 

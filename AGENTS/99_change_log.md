@@ -5,6 +5,13 @@
 プロジェクト固有の実装ログ、運用ログ、障害ログは記録しない。
 
 ## Records
+- change_id: CHG-20260220-1905
+- target_files: AGENTS.md, AGENTS/20_development_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-DEV-BUILDWIN-001..006
+- validation_result: PASS（重複IDなし、Development Rules配下に追記、Windowsビルド時のexeロック防止運用を明文化）
+- rollback_point: none
+- notes: ビルド前に毎回プロセス終了試行、フルパス一致推奨、対象なしは無害続行、同一ユーザー権限前提、`pwsh -File build.ps1` 実行例を追加
+
 - change_id: CHG-20260221-0007
 - target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-DEV-COMMITMSG-001..004

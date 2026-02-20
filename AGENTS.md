@@ -33,6 +33,9 @@ All commits may be externally audited.
 4. `AGENTS/30_output_rules.md`
 5. `AGENTS/98_maintenance_rules.md`
 
+補足:
+- Windowsでのexeロック防止ビルド運用は `AGENTS/20_development_rules.md` の `Build Procedure (Windows EXE Lock Prevention)` を参照する。
+
 変更履歴:
 - `AGENTS/99_change_log.md`（記録専用。実行ルールとしては適用しない）
 
