@@ -9,15 +9,19 @@
 
 - `RULE-INDEX-IMPL-001` 優先順位は次の単一定義を唯一の正とする。
   1. 安全性（破壊的変更確認のみ）
-  2. 実装完走（1リクエスト=1コミット）
+  2. 実装完走（小さいreqは1req=1commit）
   3. やり取り回数削減
   4. 既存儀式的ルール
 - `RULE-INDEX-IMPL-002` 実装系意図（追加/修正/バグ修正/リファクタ/機能追加/削除/ビルド/テスト/コミット）が含まれる依頼は、Plan提示で停止せず実装まで進める。
 - `RULE-INDEX-IMPL-003` 相談系意図（案出し/比較/調査/説明のみ）が主目的の依頼のみ、Plan中心で返す。
 - `RULE-INDEX-IMPL-004` 即時ブロッカーでない不確定事項は、仮定を明示して先に実装と検証を進める。
-- `RULE-INDEX-IMPL-005` 実装依頼は `1リクエスト=1コミット` を既定とし、ユーザーが `コミットしない` と明示した場合のみコミットを省略する。
+- `RULE-INDEX-IMPL-005` 小さいreqは `1req=1commit` を既定とし、大きいreqは複数reqへ分割して各reqを1commitで完了する。
 - `RULE-INDEX-IMPL-006` 既定実行モードは `Ultra Fast Path` とし、詳細手順は `AGENTS/20_development_rules.md` を唯一の正として適用する。
 - `RULE-INDEX-IMPL-007` 既存ルールと本変更が競合する場合は、本変更（Ultra Fast Path方針）を優先する。
+- `RULE-INDEX-IMPL-008` 不明点は `unknown` と明示し、推測で埋めない。
+
+Optimization target: minimize round trips, minimize diff size, preserve contracts.
+All commits may be externally audited.
 
 ## Split Structure
 この `AGENTS.md` はインデックス専用とし、実行ルール本体は以下の分割ファイルに定義する。
