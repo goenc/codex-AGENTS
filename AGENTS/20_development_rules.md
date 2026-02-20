@@ -22,6 +22,12 @@
 - `RULE-DEV-COMMITMSG-002` 2行目以降の各行は、必ず `- 何を: ` で開始する。これ以外のラベル（例: 影響/理由/背景/検証/Why/How/Notes）は禁止する。
 - `RULE-DEV-COMMITMSG-003` 1機能のみの実装で詳細が無い場合、2行目以降の内容は1行目と同一内容でもよい。ただし2行目以降は省略禁止（最低1行必須）。
 - `RULE-DEV-COMMITMSG-004` `1req=1commit` の粒度方針と整合するよう、2行目以降は当該reqの変更点のみを列挙し、無関係な事項を混ぜない。
+- `RULE-DEV-COMMITMSG-005` 1行目（要約）の直後には、必ず1行の空行を挿入しなければならない。空行なしで2行目から `- 何を: ` を開始してはならない。なお本要件適用時、`RULE-DEV-COMMITMSG-002` の適用開始行は3行目以降とする。
+- `RULE-DEV-COMMITMSG-006` コミットメッセージ内の改行コードはLFのみを使用しなければならない。CRLFを含むメッセージ生成を禁止する。
+
+## End-of-Line Policy
+- `RULE-DEV-EOL-001` リポジトリ内部の改行コードはLFに統一する。
+- `RULE-DEV-EOL-002` 改行コード正規化が必要な場合は `git add --renormalize .` を使用して正規化コミットを行う。
 
 ## Source-Driven Determination
 - `RULE-DEV-SOURCE-001` 仕様確定はソースコードを第一優先とする（Rustでは `Cargo.toml` + `src/`）。

@@ -5,6 +5,13 @@
 プロジェクト固有の実装ログ、運用ログ、障害ログは記録しない。
 
 ## Records
+- change_id: CHG-20260221-0248
+- target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-DEV-COMMITMSG-005..006, RULE-DEV-EOL-001..002
+- validation_result: PASS（重複IDなし、追記先はDevelopment Rulesのみ、他分割ファイルへの重複記載なし）
+- rollback_point: none
+- notes: コミットメッセージに要約直後の空行必須とLF改行固定を追加。リポジトリ改行コード方針をLF統一とし、正規化手順 `git add --renormalize .` を明文化。
+
 - change_id: CHG-20260220-1905
 - target_files: AGENTS.md, AGENTS/20_development_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-DEV-BUILDWIN-001..006
