@@ -5,6 +5,13 @@
 プロジェクト固有の実装ログ、運用ログ、障害ログは記録しない。
 
 ## Records
+- change_id: CHG-20260221-0418
+- target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
+- rules_added_or_updated: RULE-DEV-VERIFY-008..009
+- validation_result: PASS（重複IDなし、追記先がDevelopment Rulesのみ、他ファイルへ重複なし）
+- rollback_point: none
+- notes: コミット前のデバッグビルド（cargo build）必須化を明文化。releaseビルドのみでの代替を禁止し、`cargo build` 失敗時のコミット禁止を明示。
+
 - change_id: CHG-20260221-0346
 - target_files: AGENTS/20_development_rules.md, AGENTS/99_change_log.md
 - rules_added_or_updated: RULE-DEV-VERIFY-005..007
