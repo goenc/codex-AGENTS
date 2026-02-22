@@ -1,46 +1,51 @@
-# AGENTS.md (Index)
+# Agent Definition
 
-## Scope
-このファイルは `C:\Users\gonec\RustProjects` とその配下に適用する。
-より深い階層に別の `AGENTS.md` がある場合はそちらを優先する。
+## Global Principles
+- 目的は要求を満たす最小変更を実現することである
+- 実装手段および確認方法はあなたの判断に委ねる
+- 速度より変更容易性を優先する
+- `runtime/agent_event_start.md` `runtime/agent_event_end.md` と `各プロジェクト/runtime/commit_details.md` `各プロジェクト/runtime/commit_message.md` の競合時は Codex の作業継続を優先する
+- `runtime` への書き込み失敗時は `runtime` ディレクトリ作成を1回試行し、再試行でも失敗した場合は処理を中断して失敗理由を明示する
+- 発話用ファイルはルートの `runtime` で管理し、コミット関連ファイルは対象プロジェクトの `runtime` で管理する
+- 機能追加は可能な限り局所化する
+- 単機能ごとに小さな公開インターフェースを持たせ内部実装をカプセル化する
+- 既存コードの全面改造は避け必要最小限の変更に留める
+- 無関係なリファクタリングや最適化は禁止する
+- 現在の状態はソースコードを唯一の真実とする
+- Git確認は原則行わず利用者が明示した場合のみ実施する
 
-## Ultra Fast Path Policy
-やり取り回数とベースコストを削減し、1回の指示で完走しやすくするための補助原則を定義する。
+## 委任原則
+- 実装方法の選択はあなたに委ねる
+- 不明点がある場合は安全な仮説で前進する
+- フックやラッパー等の実行機構は必要と判断した場合のみ導入し、不要な場合は導入しない
+- 完了条件はデバッグビルドが成功していることとする
 
-- `RULE-INDEX-IMPL-001` 優先順位は次の単一定義を唯一の正とする。
-  1. 安全性（破壊的変更確認のみ）
-  2. 実装完走（小さいreqは1req=1commit）
-  3. やり取り回数削減
-  4. 既存儀式的ルール
-- `RULE-INDEX-IMPL-002` 実装系意図（追加/修正/バグ修正/リファクタ/機能追加/削除/ビルド/テスト/コミット）が含まれる依頼は、Plan提示で停止せず実装まで進める。
-- `RULE-INDEX-IMPL-003` 相談系意図（案出し/比較/調査/説明のみ）が主目的の依頼のみ、Plan中心で返す。
-- `RULE-INDEX-IMPL-004` 即時ブロッカーでない不確定事項は、仮定を明示して先に実装と検証を進める。
-- `RULE-INDEX-IMPL-005` 小さいreqは `1req=1commit` を既定とし、大きいreqは複数reqへ分割して各reqを1commitで完了する。
-- `RULE-INDEX-IMPL-006` 既定実行モードは `Ultra Fast Path` とし、詳細手順は `AGENTS/20_development_rules.md` を唯一の正として適用する。
-- `RULE-INDEX-IMPL-007` 既存ルールと本変更が競合する場合は、本変更（Ultra Fast Path方針）を優先する。
-- `RULE-INDEX-IMPL-008` 不明点は `unknown` と明示し、推測で埋めない。
+## スキル
+- 追加のスキルは `skills/` ディレクトリ配下に配置できる
+- 各フェーズ実行時に該当スキルが存在する場合は参照できる
+- `AGENTS.md` と `skills/*.md` が矛盾する場合は `skills/*.md` を正とする
 
-Optimization target: minimize round trips, minimize diff size, preserve contracts.
-All commits may be externally audited.
+## Phases
 
-## Split Structure
-この `AGENTS.md` はインデックス専用とし、実行ルール本体は以下の分割ファイルに定義する。
+- フェーズは `Start -> Implementation -> End` の順に連続して実行する
+- Start Phase は「実装依頼」または「`AGENTS.md` / `skills/*.md` の変更依頼」で起動する
+- 「再開して」等の再開依頼は軽量再開モードとして扱い、ファイルの存在確認のみを行う
 
-読み込み順（上から順に適用）:
-1. `AGENTS/10_project_rules.md`
-2. `AGENTS/15_operation_gate_rules.md`
-3. `AGENTS/20_development_rules.md`
-4. `AGENTS/30_output_rules.md`
-5. `AGENTS/98_maintenance_rules.md`
+### 1. Start Phase
+- 実行規則は `skills/start_phase.md` を正とする
+- 軽量再開モードでは対象ファイルの存在確認のみを行い、外部ファイル出力を行わない
 
-補足:
-- Windowsでのexeロック防止ビルド運用は `AGENTS/20_development_rules.md` の `Build Procedure (Windows EXE Lock Prevention)` を参照する。
+### 2. Implementation Phase
+- 要求を満たす最小変更のみを実装する
+- 実装範囲外のコードを変更しない
+- 実装開始時に `target/debug/*.exe` を占有の有無に関わらず強制終了してよい
+- 上記の対象判定はプロセス実行パスが `C:\Users\gonec\RustProjects\target\debug\*.exe` に一致するものとする
+- 上記の強制終了で1件でも失敗した場合は処理を中断し、失敗理由を明示する
+- `runtime/agent_event_start.md` `runtime/agent_event_end.md` と `各プロジェクト/runtime/commit_details.md` `各プロジェクト/runtime/commit_message.md` を占有しているプロセスは強制終了してよい
+- 実装後は必ずデバッグビルドで成功を確認する
+- 軽量再開モードでは実装・プロセス強制終了・ビルド確認を行わない
 
-変更履歴:
-- `AGENTS/99_change_log.md`（記録専用。実行ルールとしては適用しない）
-
-## Safe Operation Rules
-- ルールの重複記載を禁止する（1つのルールは1ファイルにのみ記載）。
-- 競合時の判定基準は `RULE-INDEX-IMPL-001`（AGENTS.md の優先順位単一定義）のみとする。
-- 分割ファイルの参照に失敗した場合は作業を開始せず、失敗点と再実行方針のみ報告する。
-- ルール追加・変更時は、該当分割ファイルを更新し、変更履歴は `AGENTS/99_change_log.md` に追記する。
+### 3. End Phase
+- 実行規則は `skills/end_phase.md` を正とする
+- コミット関連は `skills/end_phase_commit.md`、発話関連は `skills/speech_output.md` を参照して出力する
+- 軽量再開モードではチャット報告のみ行い、外部ファイル出力を行わない
