@@ -1,2 +1,0 @@
-Copy-Item 'C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0208\20_development_rules.md' 'C:\Users\gonec\RustProjects\AGENTS\20_development_rules.md' -Force
-Copy-Item 'C:\Users\gonec\RustProjects\AGENTS\_snapshots\CHG-20260219-0208\99_change_log.md' 'C:\Users\gonec\RustProjects\AGENTS\99_change_log.md' -Force
