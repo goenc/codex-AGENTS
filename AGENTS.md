@@ -4,9 +4,12 @@
 - 目的は要求を満たす最小変更を実現することである
 - 実装手段および確認方法はあなたの判断に委ねる
 - 速度より変更容易性を優先する
-- `runtime/agent_event_start.md` `runtime/agent_event_end.md` と `各プロジェクト/runtime/commit_details.md` `各プロジェクト/runtime/commit_message.md` の競合時は Codex の作業継続を優先する
-- `runtime` への書き込み失敗時は `runtime` ディレクトリ作成を1回試行し、再試行でも失敗した場合は処理を中断して失敗理由を明示する
-- 発話用ファイルはルートの `runtime` で管理し、コミット関連ファイルは対象プロジェクトの `runtime` で管理する
+- ルート `runtime/agent_event_start.md` `runtime/agent_event_end.md` の競合時は Codex の作業継続を優先する
+- 作業対象プロジェクト配下の `runtime/commit_details.md` `runtime/commit_message.md` の競合時は Codex の作業継続を優先する
+- ルート `runtime` への発話用ファイル書き込み失敗時は同ディレクトリ作成を1回試行し、再試行でも失敗した場合は処理を中断して失敗理由を明示する
+- 作業対象プロジェクト配下の `runtime` へのコミット関連ファイル書き込み失敗時は同ディレクトリ作成を1回試行し、再試行でも失敗した場合は処理を中断して失敗理由を明示する
+- 発話用ファイルはルートの `runtime`、コミット関連ファイルは作業対象プロジェクト配下の `runtime` で管理する
+- 作業対象プロジェクトは利用者が指定したプロジェクトディレクトリを優先し、未指定時は変更対象ファイルを含むプロジェクトディレクトリを採用する
 - 機能追加は可能な限り局所化する
 - 単機能ごとに小さな公開インターフェースを持たせ内部実装をカプセル化する
 - 既存コードの全面改造は避け必要最小限の変更に留める
@@ -45,7 +48,8 @@
 - 実装開始時に `target/debug/*.exe` を占有の有無に関わらず強制終了してよい
 - 上記の対象判定はプロセス実行パスが `C:\Users\gonec\RustProjects\target\debug\*.exe` に一致するものとする
 - 上記の強制終了で1件でも失敗した場合は処理を中断し、失敗理由を明示する
-- `runtime/agent_event_start.md` `runtime/agent_event_end.md` と `各プロジェクト/runtime/commit_details.md` `各プロジェクト/runtime/commit_message.md` を占有しているプロセスは強制終了してよい
+- ルート `runtime/agent_event_start.md` `runtime/agent_event_end.md` を占有しているプロセスは強制終了してよい
+- 作業対象プロジェクト配下の `runtime/commit_details.md` `runtime/commit_message.md` を占有しているプロセスは強制終了してよい
 - 実装後は必ずデバッグビルドで成功を確認する
 - 軽量再開モードでは実装・プロセス強制終了・ビルド確認を行わない
 

@@ -13,7 +13,7 @@
 - `AGENTS.md` または `skills/*.md` の変更依頼を受けたとき
 - 本フェーズ完了後は Implementation Phase を実行する
 
-## 出力先（固定）
+## 出力先
 
 ルート runtime/agent_event_start.md
 

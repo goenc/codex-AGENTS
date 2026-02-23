@@ -7,17 +7,16 @@
 ## 起動条件
 - `skills/end_phase.md` から呼び出されたとき
 
-## 対象プロジェクト
+## 出力対象
 
-- コミット関連ファイルは対象プロジェクト単位で管理する
-- 出力先は対象プロジェクト直下の `runtime` ディレクトリとする
-- 対象プロジェクトの `runtime` がない場合は作成してから書き込む
+- コミット関連ファイルは作業対象プロジェクト配下の `runtime` ディレクトリで管理する
+- 作業対象プロジェクト配下の `runtime` がない場合は作成してから書き込む
 
 ## 出力ファイル
 
 ### 1) コミット詳細ログ
 出力先:
-対象プロジェクト/runtime/commit_details.md
+作業対象プロジェクト配下 runtime/commit_details.md
 
 保存:
 - 変更ありの場合のみ追記
@@ -34,7 +33,7 @@
 
 ### 2) 外部コミット用メッセージ
 出力先:
-対象プロジェクト/runtime/commit_message.md
+作業対象プロジェクト配下 runtime/commit_message.md
 
 保存:
 - 常に上書き（変更の有無に関係なく毎回生成）
@@ -62,11 +61,11 @@
 
 1. 変更の有無を判定する
 2. 変更ありの場合のみ commit_details.md に追記する
-3. 対象プロジェクト runtime に commit_message.md を生成する
+3. 作業対象プロジェクト配下 runtime に commit_message.md を生成する
 
 ## 失敗時
 
-- 対象プロジェクトの `runtime/commit_details.md` `runtime/commit_message.md` への書き込み失敗時は対象プロジェクト `runtime` ディレクトリ作成を1回試行したうえで同一ファイルへ1回再試行する
+- 作業対象プロジェクト配下の `runtime/commit_details.md` `runtime/commit_message.md` への書き込み失敗時は同プロジェクト配下の `runtime` ディレクトリ作成を1回試行したうえで同一ファイルへ1回再試行する
 - 再試行でも失敗した場合は処理を中断し失敗理由を対話で明示する
 
 ## 禁止事項
