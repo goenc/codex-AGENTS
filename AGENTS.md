@@ -28,6 +28,7 @@
 ## スキル
 - 追加のスキルは `skills/` ディレクトリ配下に配置できる
 - 各フェーズ実行時に該当スキルが存在する場合は参照できる
+- ファイル分割の実行規則は `skills/file_splitting.md` を参照する
 - `AGENTS.md` と `skills/*.md` が矛盾する場合は `skills/*.md` を正とする
 
 ## Phases
