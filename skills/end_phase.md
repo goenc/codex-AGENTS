@@ -9,8 +9,8 @@
 
 ## 実行順序
 1. `skills/end_phase_commit.md` を参照してコミット関連ファイルを生成する
-2. 利用者が明示的に「コミットしない」と指示していない場合のみ `skills/end_phase_git_commit.md` を参照して git commit を実行する
-3. 利用者が明示的に「プッシュしない」と指示していない場合のみ `skills/end_phase_git_push.md` を参照して git push を実行する
+2. `skills/end_phase_git_commit.md` を参照して git commit を実行する
+3. `skills/end_phase_git_push.md` を参照して git push を実行する
 4. `skills/speech_output.md` を参照して発話用ファイルを生成する
 
 ## 適用範囲
