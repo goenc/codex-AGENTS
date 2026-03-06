@@ -2,7 +2,6 @@
 
 ## 目的
 - End Phase のコミット関連ファイルを生成する
-- 本スキルは git commit を実行しない
 
 ## 起動条件
 - `skills/end_phase.md` から呼び出されたとき
@@ -70,7 +69,6 @@
 
 ## 禁止事項
 
-- git commit の実行
 - runtime 以外への保存
 - commit_message.md の追記
 - 日本語以外での記述

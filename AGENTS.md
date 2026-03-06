@@ -35,6 +35,9 @@
 
 - フェーズは `Start -> Implementation -> End` の順に連続して実行する
 - Start Phase は「実装依頼」または「`AGENTS.md` / `skills/*.md` の変更依頼」で起動する
+- 実装依頼および `AGENTS.md` / `skills/*.md` の変更依頼は End Phase までを既定の完了範囲とする
+- End Phase では `skills/end_phase.md` の実行順序に従い、既定で git commit 実行まで行う
+- 利用者が明示的に「コミットしない」と指示した場合のみ git commit 実行を省略できる
 - プロジェクト宣言系ファイル（`プロジェクト宣言_*.md`）が指定された再開依頼は軽量再開モードとして扱い、ファイルの存在確認のみを行う
 
 ### 1. Start Phase

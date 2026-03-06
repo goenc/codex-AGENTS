@@ -11,7 +11,7 @@
 ## 出力ファイル
 
 出力先:
-ルート runtime/agent_event_end.md
+C:\Users\gonec\.codex\runtime/agent_event_end.md
 
 保存:
 - 常に上書き

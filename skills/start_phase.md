@@ -15,7 +15,7 @@
 
 ## 出力先
 
-ルート runtime/agent_event_start.md
+C:\Users\gonec\.codex\runtime/agent_event_start.md
 
 ## 出力方式
 
